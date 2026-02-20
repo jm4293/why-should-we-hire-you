@@ -16,6 +16,8 @@
 
 ### 핵심 원칙
 
+- **1 File = 1 Component**: 하나의 파일에는 무조건 하나의 컴포넌트만 작성
+- **글로벌 모달 관리**: 모달/Dialog는 인라인으로 렌더링하지 않고, Zustand 등 전역 상태를 통해 독립된 컴포넌트로 관리
 - 강조된 단어, 오바스러운 단어, 감탄사 **지양** → 자연스러운 말투
 - 자소서 소제목 **필수** (소제목만 봐도 내용과 흥미 유발)
 - 자소서는 하나의 질문을 여러 맥락으로 나눠서 작성
@@ -63,6 +65,8 @@ src/
 │       ├── crawl/route.ts        # URL 크롤링 (Edge Runtime)
 │       └── analyze/route.ts      # AI 스트리밍 (Edge Runtime)
 ├── components/
+│   ├── common/                   # 공통 사용 컴포넌트 (Guard 등)
+│   ├── modals/                   # 전역 모달 컴포넌트 (GlobalModalProvider 등)
 │   ├── landing/                  # 랜딩 페이지 섹션 컴포넌트
 │   ├── analyze/                  # 스텝별 입력 컴포넌트
 │   ├── result/                   # 결과 화면 컴포넌트
@@ -74,7 +78,7 @@ src/
 │   ├── storage/                  # IndexedDB 관리
 │   ├── crypto/                   # API 키 암호화
 │   └── crawl/                    # 크롤링 유틸
-├── store/                        # Zustand 스토어
+├── store/                        # Zustand 스토어 (analysis, modal 등)
 ├── types/                        # TypeScript 타입 정의
 └── hooks/                        # 커스텀 훅
 ```

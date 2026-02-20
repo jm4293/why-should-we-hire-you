@@ -2,48 +2,30 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Settings, Plus, Monitor } from "lucide-react";
+import { Settings, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { AnalyzeWizard } from "@/components/analyze/AnalyzeWizard";
 import { HistorySidebar } from "@/components/history/HistorySidebar";
+import { MobileGuard } from "@/components/common/MobileGuard";
 import { hasAnyAPIKey } from "@/lib/storage/api-keys";
 import { useAnalysisStore } from "@/store/analysis";
+import { useModalStore } from "@/store/modal";
 import { cn } from "@/lib/utils";
 import type { HistoryItem } from "@/types";
-
-function MobileGuard({ children }: { children: React.ReactNode }) {
-  return (
-    <>
-      {/* 모바일 안내 */}
-      <div className="flex min-h-screen flex-col items-center justify-center gap-4 p-8 md:hidden">
-        <Monitor size={40} className="text-muted-foreground/50" />
-        <h2 className="text-xl font-semibold text-primary">데스크탑에서 이용하세요</h2>
-        <p className="text-center text-sm leading-relaxed text-muted-foreground">
-          이 서비스는 넓은 화면에서 최적화되어 있습니다.
-          <br />
-          PC 또는 노트북에서 접속해주세요.
-        </p>
-      </div>
-      {/* 데스크탑 */}
-      <div className="hidden md:flex md:h-screen md:flex-col">{children}</div>
-    </>
-  );
-}
 
 export default function AnalyzePage() {
   const router = useRouter();
   const { reset, setInput, setResults, setIsAnalyzing } = useAnalysisStore();
+  const openModal = useModalStore((state) => state.openModal);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [showNoKeyModal, setShowNoKeyModal] = useState(false);
   const [selectedHistory, setSelectedHistory] = useState<HistoryItem | null>(null);
 
   useEffect(() => {
     const isMobile = window.innerWidth < 768;
     if (!isMobile && !hasAnyAPIKey()) {
-      setShowNoKeyModal(true);
+      openModal("noKey");
     }
-  }, []);
+  }, [openModal]);
 
   const handleNewAnalysis = () => {
     reset();
@@ -60,36 +42,12 @@ export default function AnalyzePage() {
 
   return (
     <MobileGuard>
-      {/* API 키 없음 모달 */}
-      <Dialog open={showNoKeyModal} onOpenChange={setShowNoKeyModal}>
-        <DialogContent className="max-w-sm">
-          <DialogHeader>
-            <DialogTitle className="text-base">API 키가 필요합니다</DialogTitle>
-          </DialogHeader>
-          <p className="text-sm leading-relaxed text-muted-foreground">
-            서비스를 이용하려면 OpenAI, Anthropic, Google 중 하나 이상의 API 키를 먼저 등록해야
-            합니다. 설정 페이지에서 발급 방법도 확인할 수 있습니다.
-          </p>
-          <div className="flex justify-end">
-            <Button
-              size="sm"
-              onClick={() => {
-                setShowNoKeyModal(false);
-                router.push("/settings");
-              }}
-            >
-              설정으로 이동
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
-
       {/* 상단 네비 */}
-      <header className="flex h-14 shrink-0 items-center justify-between border-b border-border bg-background px-6">
+      <header className="border-border bg-background flex h-14 shrink-0 items-center justify-between border-b px-6">
         <div className="flex items-center gap-3">
           <button
             onClick={() => router.push("/")}
-            className="text-sm font-semibold text-primary hover:text-muted-foreground"
+            className="text-primary hover:text-muted-foreground text-sm font-semibold"
           >
             Why Should We Hire You?
           </button>
@@ -107,7 +65,7 @@ export default function AnalyzePage() {
             variant="ghost"
             size="sm"
             onClick={() => router.push("/settings")}
-            className="gap-1.5 text-xs text-muted-foreground"
+            className="text-muted-foreground gap-1.5 text-xs"
           >
             <Settings size={14} />
             설정

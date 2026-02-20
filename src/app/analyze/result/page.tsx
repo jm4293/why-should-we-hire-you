@@ -21,8 +21,8 @@ function MobileGuard({ children }: { children: React.ReactNode }) {
     <>
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 p-8 md:hidden">
         <Monitor size={40} className="text-muted-foreground/50" />
-        <h2 className="text-xl font-semibold text-primary">데스크탑에서 이용하세요</h2>
-        <p className="text-center text-sm leading-relaxed text-muted-foreground">
+        <h2 className="text-primary text-xl font-semibold">데스크탑에서 이용하세요</h2>
+        <p className="text-muted-foreground text-center text-sm leading-relaxed">
           이 서비스는 넓은 화면에서 최적화되어 있습니다.
           <br />
           PC 또는 노트북에서 접속해주세요.
@@ -146,6 +146,13 @@ export default function ResultPage() {
     if (allDone) {
       setIsAnalyzing(false);
       buildAnalysisResult(latest);
+
+      const hasSuccess = latest.some((r) => r.status === "done");
+      if (hasSuccess) {
+        toast.success("AI 면접관의 분석이 완료되었습니다!");
+      } else {
+        toast.error("모든 분석이 실패했습니다. 다시 시도해주세요.");
+      }
     }
   };
 
@@ -195,18 +202,18 @@ export default function ResultPage() {
     if (r.status === "done") return <CheckCircle size={12} className="text-muted-foreground" />;
     if (r.status === "error") return <span className="h-2 w-2 rounded-full bg-gray-400" />;
     if (r.status === "streaming")
-      return <Loader2 size={12} className="animate-spin text-muted-foreground/70" />;
+      return <Loader2 size={12} className="text-muted-foreground/70 animate-spin" />;
     return <span className="h-2 w-2 rounded-full bg-gray-200" />;
   };
 
   return (
     <MobileGuard>
       {/* 상단 네비 */}
-      <header className="flex h-14 shrink-0 items-center justify-between border-b border-border bg-background px-6">
+      <header className="border-border bg-background flex h-14 shrink-0 items-center justify-between border-b px-6">
         <div className="flex items-center gap-3">
           <button
             onClick={() => router.push("/analyze")}
-            className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary/90"
+            className="text-muted-foreground hover:text-primary/90 flex items-center gap-1.5 text-sm"
           >
             <ArrowLeft size={14} />새 분석
           </button>
@@ -250,7 +257,7 @@ export default function ResultPage() {
         {/* 메인 영역 */}
         <main className="flex min-h-0 flex-1 flex-col">
           {/* 면접관 탭 */}
-          <div className="shrink-0 border-b border-border bg-background px-6">
+          <div className="border-border bg-background shrink-0 border-b px-6">
             <div className="flex gap-1 overflow-x-auto py-2">
               {results.map((r, i) => (
                 <button
@@ -265,7 +272,8 @@ export default function ResultPage() {
                 >
                   {statusIcon(r)}
                   <span>
-                    면접관 {i + 1} <span className="font-normal opacity-70">({r.model})</span>
+                    {r.personaName || `면접관 ${i + 1}`}{" "}
+                    <span className="font-normal opacity-70">({r.model})</span>
                   </span>
                 </button>
               ))}
@@ -274,9 +282,9 @@ export default function ResultPage() {
 
           <div className="flex min-h-0 flex-1">
             {/* 왼쪽: PDF 뷰어 */}
-            <div className="flex w-1/4 flex-col border-r border-border">
-              <div className="flex shrink-0 items-center gap-2 border-b border-border/50 bg-muted/50 px-4 py-2">
-                <span className="text-[11px] font-medium tracking-wide text-muted-foreground/70 uppercase">
+            <div className="border-border flex w-1/4 flex-col border-r">
+              <div className="border-border/50 bg-muted/50 flex shrink-0 items-center gap-2 border-b px-4 py-2">
+                <span className="text-muted-foreground/70 text-[11px] font-medium tracking-wide uppercase">
                   제출 서류
                 </span>
               </div>
@@ -287,8 +295,8 @@ export default function ResultPage() {
 
             {/* 오른쪽: AI 결과 */}
             <div className="flex w-3/4 flex-col">
-              <div className="flex shrink-0 items-center gap-2 border-b border-border/50 bg-muted/50 px-4 py-2">
-                <span className="text-[11px] font-medium tracking-wide text-muted-foreground/70 uppercase">
+              <div className="border-border/50 bg-muted/50 flex shrink-0 items-center gap-2 border-b px-4 py-2">
+                <span className="text-muted-foreground/70 text-[11px] font-medium tracking-wide uppercase">
                   AI 분석 결과
                 </span>
               </div>
@@ -296,7 +304,7 @@ export default function ResultPage() {
                 {currentResult ? (
                   <ResultPanel result={currentResult} onRetry={handleRetry} />
                 ) : (
-                  <div className="flex h-full items-center justify-center text-sm text-muted-foreground/70">
+                  <div className="text-muted-foreground/70 flex h-full items-center justify-center text-sm">
                     면접관을 선택해주세요.
                   </div>
                 )}

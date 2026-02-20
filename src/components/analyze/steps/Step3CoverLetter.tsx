@@ -63,15 +63,15 @@ export function Step3CoverLetter({ value, onChange }: Step3CoverLetterProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-semibold text-primary">자소서 문항</h2>
-        <p className="mt-1 text-sm text-muted-foreground">
+        <h2 className="text-primary text-xl font-semibold">자소서 문항</h2>
+        <p className="text-muted-foreground mt-1 text-sm">
           자소서 문항과 최대 글자 수를 입력해주세요. 문항이 없으면 건너뛸 수 있습니다.
         </p>
       </div>
 
       {/* 예시 문항 */}
       <div>
-        <p className="mb-2 text-xs text-muted-foreground">빠르게 추가하기</p>
+        <p className="text-primary/80 mb-2 text-xs font-semibold">빠르게 추가하기</p>
         <div className="flex flex-wrap gap-2">
           {EXAMPLES.map((ex) => {
             const alreadyAdded = value.some((v) => v.question === ex.question);
@@ -85,7 +85,7 @@ export function Step3CoverLetter({ value, onChange }: Step3CoverLetterProps) {
                 className={cn(
                   "rounded-full border px-3 py-1 text-xs transition-colors",
                   alreadyAdded
-                    ? "cursor-default border-gray-900 bg-primary text-primary-foreground"
+                    ? "bg-primary text-primary-foreground cursor-default border-gray-900"
                     : "border-border text-muted-foreground hover:border-gray-400"
                 )}
               >
@@ -99,13 +99,13 @@ export function Step3CoverLetter({ value, onChange }: Step3CoverLetterProps) {
       {/* 문항 목록 */}
       <div className="space-y-4">
         {value.map((item, idx) => (
-          <div key={item.id} className="rounded-2xl border border-border bg-background p-5">
+          <div key={item.id} className="border-border bg-background rounded-2xl border p-5">
             <div className="mb-3 flex items-center gap-2">
               <GripVertical size={14} className="text-muted-foreground/50" />
-              <span className="text-xs font-medium text-muted-foreground">문항 {idx + 1}</span>
+              <span className="text-primary/90 text-sm font-bold">문항 {idx + 1}</span>
               <button
                 onClick={() => removeItem(item.id)}
-                className="ml-auto text-muted-foreground/50 transition-colors hover:text-gray-700"
+                className="text-muted-foreground/50 ml-auto transition-colors hover:text-gray-700"
               >
                 <X size={14} />
               </button>
@@ -113,7 +113,7 @@ export function Step3CoverLetter({ value, onChange }: Step3CoverLetterProps) {
 
             <div className="space-y-3">
               <div>
-                <Label className="mb-1.5 text-xs text-muted-foreground">문항 내용</Label>
+                <Label className="text-primary/80 mb-1.5 text-xs font-semibold">문항 내용</Label>
                 <Textarea
                   value={item.question}
                   onChange={(e) => updateItem(item.id, { question: e.target.value })}
@@ -124,7 +124,9 @@ export function Step3CoverLetter({ value, onChange }: Step3CoverLetterProps) {
               </div>
 
               <div className="flex items-center gap-3">
-                <Label className="shrink-0 text-xs text-muted-foreground">최대 글자 수</Label>
+                <Label className="text-primary/80 shrink-0 text-xs font-semibold">
+                  최대 글자 수
+                </Label>
                 <Input
                   type="number"
                   value={item.maxLength}
@@ -136,7 +138,7 @@ export function Step3CoverLetter({ value, onChange }: Step3CoverLetterProps) {
                   step={100}
                   className="w-28 text-sm"
                 />
-                <span className="text-xs text-muted-foreground/70">자</span>
+                <span className="text-muted-foreground/70 text-xs">자</span>
               </div>
             </div>
           </div>
@@ -146,14 +148,14 @@ export function Step3CoverLetter({ value, onChange }: Step3CoverLetterProps) {
       <Button
         variant="outline"
         onClick={() => addItem()}
-        className="w-full border-dashed text-sm text-muted-foreground"
+        className="text-muted-foreground w-full border-dashed text-sm"
       >
         <Plus size={15} />
         문항 추가
       </Button>
 
       {value.length === 0 && (
-        <p className="text-center text-xs text-muted-foreground/70">
+        <p className="text-muted-foreground/70 text-center text-xs">
           문항을 추가하지 않으면 자소서 초안 섹션이 생략됩니다.
         </p>
       )}

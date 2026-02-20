@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/sonner";
+import { GlobalModalProvider } from "@/components/modals/GlobalModalProvider";
 import "./globals.css";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://whyhireyou.kr";
@@ -73,8 +74,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="font-[Pretendard] antialiased">
+        <GlobalModalProvider />
         {children}
-        <Toaster position="top-right" richColors />
+        <Toaster position="top-center" richColors />
       </body>
     </html>
   );

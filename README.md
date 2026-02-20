@@ -49,18 +49,25 @@ npm run dev
 
 ## 기술 스택
 
-| 분류       | 기술                     |
-| ---------- | ------------------------ |
-| 프레임워크 | Next.js 14+ (App Router) |
-| 스타일링   | Tailwind CSS + shadcn/ui |
-| 아이콘     | Lucide React             |
-| 애니메이션 | GSAP + ScrollTrigger     |
-| AI 통합    | Vercel AI SDK            |
-| PDF 파싱   | pdfjs-dist               |
-| PDF 생성   | html2pdf.js              |
-| 로컬 저장  | IndexedDB (idb)          |
-| 상태 관리  | Zustand                  |
-| 배포       | Vercel                   |
+| 분류       | 기술                                 |
+| ---------- | ------------------------------------ |
+| 프레임워크 | Next.js 14+ (App Router)             |
+| 스타일링   | Tailwind CSS + shadcn/ui             |
+| 아이콘     | Lucide React                         |
+| 애니메이션 | GSAP + ScrollTrigger                 |
+| AI 통합    | Vercel AI SDK                        |
+| PDF 파싱   | pdfjs-dist                           |
+| PDF 생성   | html2pdf.js                          |
+| 로컬 저장  | IndexedDB (idb)                      |
+| 상태 관리  | Zustand (Analysis, UI Modal 상태 등) |
+| 배포       | Vercel                               |
+
+---
+
+## 코딩 컨벤션 (규칙)
+
+1. **단일 컴포넌트 원칙**: 모든 컴포넌트는 개별 파일로 분리하여 관리합니다 (1 File = 1 Component).
+2. **글로벌 모달 관리**: 인라인 모달 작성을 지양하고 기능별로 독립된 파일로 생성 후 Zustand 전역 상태로 관리합니다.
 
 ---
 
