@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import {
   PanelLeftClose,
   PanelLeftOpen,
@@ -23,8 +22,8 @@ import type { HistoryItem } from "@/types";
 
 const PROVIDER_COLORS = {
   openai: "bg-gray-100 text-gray-600",
-  anthropic: "bg-gray-200 text-gray-700",
-  google: "bg-gray-900 text-white",
+  anthropic: "bg-gray-100 text-gray-600",
+  google: "bg-gray-100 text-gray-600",
 };
 const PROVIDER_SHORT = { openai: "GPT", anthropic: "Claude", google: "Gemini" };
 

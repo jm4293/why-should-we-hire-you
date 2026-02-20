@@ -93,7 +93,10 @@ export function AnalyzeWizard() {
       case 3:
         return true; // 선택 사항
       case 4:
-        return (input.personas?.length ?? 0) > 0;
+        return (
+          (input.personas?.length ?? 0) > 0 &&
+          (input.personas?.every((p) => p.name.trim() !== "") ?? false)
+        );
       case 5:
         return true;
       default:

@@ -21,8 +21,8 @@ const PROVIDER_LABELS: Record<AIProvider, string> = {
 
 const PROVIDER_COLORS: Record<AIProvider, string> = {
   openai: "bg-gray-100 text-gray-700",
-  anthropic: "bg-gray-200 text-gray-700",
-  google: "bg-gray-900 text-white",
+  anthropic: "bg-gray-100 text-gray-700",
+  google: "bg-gray-100 text-gray-700",
 };
 
 const PERSONA_EXAMPLES = [
@@ -43,6 +43,11 @@ const PERSONA_EXAMPLES = [
   },
 ];
 
+// 내부에서 enabled 플래그를 포함한 타입
+interface PersonaSlot extends Persona {
+  enabled: boolean;
+}
+
 interface Step4PersonaProps {
   value: Persona[];
   onChange: (value: Persona[]) => void;
@@ -52,37 +57,68 @@ export function Step4Persona({ value, onChange }: Step4PersonaProps) {
   const apiKeys = getAllAPIKeys();
   const noKeys = apiKeys.length === 0;
 
-  // value가 비어있으면 마운트 전에 defaults를 만들어 초기 expandedId 계산
-  const initialDefaults =
-    value.length === 0 && !noKeys
-      ? apiKeys.map((k) => ({
-          id: crypto.randomUUID(),
-          name: "",
-          role: "",
-          description: "",
-          provider: k.provider,
-          model: k.model,
-        }))
-      : null;
+  // 슬롯: API 키마다 1개씩. enabled 여부를 로컬로 관리.
+  const buildSlots = (): PersonaSlot[] =>
+    apiKeys.map((k) => {
+      const existing = value.find((p) => p.provider === k.provider);
+      const alreadyEnabled = value.some((p) => p.provider === k.provider);
+      return {
+        id: existing?.id ?? crypto.randomUUID(),
+        name: existing?.name ?? "",
+        role: existing?.role ?? "",
+        description: existing?.description ?? "",
+        provider: k.provider,
+        model: k.model,
+        // value에 이미 있는 경우만 활성화 (기본값: 모두 미선택)
+        enabled: alreadyEnabled,
+      };
+    });
 
+  const [slots, setSlots] = useState<PersonaSlot[]>(buildSlots);
   const [savedPersonas, setSavedPersonas] = useState<Persona[]>([]);
-  const [expandedId, setExpandedId] = useState<string | null>(
-    () => value[0]?.id ?? initialDefaults?.[0]?.id ?? null
-  );
+  const [expandedId, setExpandedId] = useState<string | null>(() => slots[0]?.id ?? null);
+
+  // slots 변경 시 부모에 활성화된 것만 전달
+  const syncToParent = (nextSlots: PersonaSlot[]) => {
+    onChange(
+      nextSlots
+        .filter((s) => s.enabled)
+        .map(
+          (s) =>
+            ({
+              id: s.id,
+              name: s.name,
+              role: s.role,
+              description: s.description,
+              provider: s.provider,
+              model: s.model,
+            }) as Persona
+        )
+    );
+  };
 
   useEffect(() => {
-    if (initialDefaults) {
-      onChange(initialDefaults as Persona[]);
-    }
+    // 최초 마운트 시 부모에 초기 활성화 실동 전달
+    syncToParent(slots);
     getAllPersonas().then(setSavedPersonas);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const updatePersona = (id: string, partial: Partial<Persona>) => {
-    onChange(value.map((p) => (p.id === id ? { ...p, ...partial } : p)));
+  const updateSlot = (id: string, partial: Partial<PersonaSlot>) => {
+    const next = slots.map((s) => (s.id === id ? { ...s, ...partial } : s));
+    setSlots(next);
+    syncToParent(next);
   };
 
-  const handleSavePersona = async (persona: Persona) => {
-    await savePersona(persona);
+  const toggleEnabled = (id: string) => {
+    const next = slots.map((s) => (s.id === id ? { ...s, enabled: !s.enabled } : s));
+    setSlots(next);
+    syncToParent(next);
+  };
+
+  const handleSavePersona = async (slot: PersonaSlot) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { enabled, ...persona } = slot;
+    await savePersona(persona as Persona);
     setSavedPersonas(await getAllPersonas());
   };
 
@@ -92,7 +128,7 @@ export function Step4Persona({ value, onChange }: Step4PersonaProps) {
   };
 
   const applyExample = (id: string, example: (typeof PERSONA_EXAMPLES)[0]) => {
-    updatePersona(id, {
+    updateSlot(id, {
       name: example.name,
       role: example.name,
       description: example.description,
@@ -120,13 +156,14 @@ export function Step4Persona({ value, onChange }: Step4PersonaProps) {
     );
   }
 
+  const enabledCount = slots.filter((s) => s.enabled).length;
+
   return (
     <div className="space-y-6">
       <div>
         <h2 className="text-xl font-semibold text-gray-900">AI 면접관 설정</h2>
         <p className="mt-1 text-sm text-gray-500">
-          등록된 API 키 수만큼 면접관이 생성됩니다. 각 면접관이 어떤 기준으로 이력서를 볼지
-          설정하세요.
+          사용할 면접관을 선택하고, 각 면접관이 어떤 기준으로 이력서를 볼지 설정하세요.
         </p>
       </div>
 
@@ -139,12 +176,13 @@ export function Step4Persona({ value, onChange }: Step4PersonaProps) {
               <div key={sp.id} className="flex items-center gap-1">
                 <button
                   onClick={() => {
-                    const target = value.find((v) => v.provider === sp.provider);
+                    const target = slots.find((s) => s.provider === sp.provider);
                     if (target) {
-                      updatePersona(target.id, {
+                      updateSlot(target.id, {
                         name: sp.name,
                         role: sp.role,
                         description: sp.description,
+                        enabled: true,
                       });
                     }
                   }}
@@ -166,42 +204,82 @@ export function Step4Persona({ value, onChange }: Step4PersonaProps) {
 
       {/* 면접관 카드 */}
       <div className="space-y-3">
-        {value.map((persona, idx) => {
-          const isExpanded = expandedId === persona.id;
+        {slots.map((slot, idx) => {
+          const isExpanded = expandedId === slot.id;
+          const isLast = enabledCount <= 1 && slot.enabled;
+
           return (
             <div
-              key={persona.id}
-              className="overflow-hidden rounded-2xl border border-gray-200 bg-white"
+              key={slot.id}
+              className={cn(
+                "overflow-hidden rounded-2xl border bg-white transition-opacity",
+                slot.enabled ? "border-gray-200" : "border-gray-100 opacity-50"
+              )}
             >
               {/* 헤더 */}
-              <button
-                className="flex w-full items-center gap-3 px-5 py-4 text-left"
-                onClick={() => setExpandedId(isExpanded ? null : persona.id)}
-              >
-                <span className="text-sm font-medium text-gray-400">면접관 {idx + 1}</span>
-                <span
+              <div className="flex w-full items-center gap-3 px-5 py-4">
+                {/* 선택 토글 */}
+                <button
+                  type="button"
+                  onClick={() => toggleEnabled(slot.id)}
+                  disabled={isLast}
+                  title={isLast ? "최소 1명의 면접관이 필요합니다" : ""}
                   className={cn(
-                    "flex-1 text-sm font-semibold",
-                    persona.name ? "text-gray-900" : "text-gray-400"
+                    "flex h-5 w-5 shrink-0 items-center justify-center rounded border transition-colors",
+                    slot.enabled
+                      ? "border-gray-900 bg-gray-900 text-white"
+                      : "border-gray-300 bg-white",
+                    isLast && "cursor-not-allowed opacity-50"
                   )}
                 >
-                  {persona.name || "직책 / 역할을 입력하세요"}
-                </span>
-                <Badge
-                  className={cn("text-xs font-medium", PROVIDER_COLORS[persona.provider])}
-                  variant="secondary"
+                  {slot.enabled && (
+                    <svg viewBox="0 0 12 12" fill="none" className="h-3 w-3">
+                      <path
+                        d="M2 6l3 3 5-5"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  )}
+                </button>
+
+                {/* 헤더 클릭 영역 */}
+                <button
+                  className="flex flex-1 items-center gap-3 text-left"
+                  onClick={() => slot.enabled && setExpandedId(isExpanded ? null : slot.id)}
+                  disabled={!slot.enabled}
                 >
-                  {PROVIDER_LABELS[persona.provider]}
-                </Badge>
-                {isExpanded ? (
-                  <ChevronUp size={15} className="text-gray-400" />
-                ) : (
-                  <ChevronDown size={15} className="text-gray-400" />
-                )}
-              </button>
+                  <span className="text-sm font-medium text-gray-400">
+                    면접관 {idx + 1}{" "}
+                    <span className="text-xs font-normal opacity-70">({slot.model})</span>
+                  </span>
+                  <span
+                    className={cn(
+                      "flex-1 text-sm font-semibold",
+                      slot.name ? "text-gray-900" : "text-gray-400"
+                    )}
+                  >
+                    {slot.enabled ? slot.name || "직책 / 역할을 입력하세요" : "비활성화"}
+                  </span>
+                  <Badge
+                    className={cn("text-xs font-medium", PROVIDER_COLORS[slot.provider])}
+                    variant="secondary"
+                  >
+                    {PROVIDER_LABELS[slot.provider]}
+                  </Badge>
+                  {slot.enabled &&
+                    (isExpanded ? (
+                      <ChevronUp size={15} className="text-gray-400" />
+                    ) : (
+                      <ChevronDown size={15} className="text-gray-400" />
+                    ))}
+                </button>
+              </div>
 
               {/* 펼쳐진 내용 */}
-              {isExpanded && (
+              {isExpanded && slot.enabled && (
                 <div className="space-y-4 border-t border-gray-100 px-5 pt-4 pb-5">
                   {/* 빠르게 선택하기 */}
                   <div>
@@ -210,10 +288,10 @@ export function Step4Persona({ value, onChange }: Step4PersonaProps) {
                       {PERSONA_EXAMPLES.map((ex) => (
                         <button
                           key={ex.name}
-                          onClick={() => applyExample(persona.id, ex)}
+                          onClick={() => applyExample(slot.id, ex)}
                           className={cn(
                             "rounded-full border px-3 py-1 text-xs transition-colors",
-                            persona.name === ex.name
+                            slot.name === ex.name
                               ? "border-gray-900 bg-gray-900 text-white"
                               : "border-gray-200 text-gray-500 hover:border-gray-400"
                           )}
@@ -227,8 +305,8 @@ export function Step4Persona({ value, onChange }: Step4PersonaProps) {
                   <div>
                     <Label className="mb-1.5 text-xs text-gray-600">직책 / 역할</Label>
                     <Input
-                      value={persona.name}
-                      onChange={(e) => updatePersona(persona.id, { name: e.target.value })}
+                      value={slot.name}
+                      onChange={(e) => updateSlot(slot.id, { name: e.target.value })}
                       placeholder="예: 시니어 개발자, HR 담당자, 팀장"
                       className="text-sm"
                     />
@@ -239,9 +317,9 @@ export function Step4Persona({ value, onChange }: Step4PersonaProps) {
                       이 면접관은 무엇을 중점으로 평가하나요?
                     </Label>
                     <Textarea
-                      value={persona.description}
+                      value={slot.description}
                       onChange={(e) =>
-                        updatePersona(persona.id, {
+                        updateSlot(slot.id, {
                           description: e.target.value,
                         })
                       }
@@ -253,12 +331,12 @@ export function Step4Persona({ value, onChange }: Step4PersonaProps) {
 
                   <div className="flex items-center justify-between">
                     <p className="text-xs text-gray-400">
-                      사용 모델: <span className="text-gray-600">{persona.model}</span>
+                      사용 모델: <span className="text-gray-600">{slot.model}</span>
                     </p>
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => handleSavePersona(persona)}
+                      onClick={() => handleSavePersona(slot)}
                       className="gap-1.5 text-xs"
                     >
                       <Save size={12} />
@@ -271,6 +349,16 @@ export function Step4Persona({ value, onChange }: Step4PersonaProps) {
           );
         })}
       </div>
+
+      {/* 안내 문구 */}
+      <p className="text-xs text-gray-400">
+        ✓ 선택된 면접관: <span className="font-medium text-gray-600">{enabledCount}명</span>
+        {value.some((p) => !p.name) && (
+          <span className="ml-2 text-red-400">
+            · 직책/역할을 입력해야 다음으로 넘어갈 수 있습니다.
+          </span>
+        )}
+      </p>
     </div>
   );
 }

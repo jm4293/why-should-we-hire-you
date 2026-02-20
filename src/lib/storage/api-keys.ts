@@ -18,9 +18,9 @@ const MODEL_MAP: Record<AIProvider, string> = {
 };
 
 export const DEFAULT_MODELS: Record<AIProvider, string> = {
-  openai: "gpt-4o",
+  openai: "gpt-5.2",
   anthropic: "claude-opus-4-6",
-  google: "gemini-2.0-flash",
+  google: "gemini-3-flash-preview",
 };
 
 export function saveAPIKey(provider: AIProvider, key: string, model: string): void {

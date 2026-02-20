@@ -264,17 +264,17 @@ export default function ResultPage() {
                   )}
                 >
                   {statusIcon(r)}
-                  <span>면접관 {i + 1}</span>
-                  <span className="text-gray-400">{r.personaName}</span>
+                  <span>
+                    면접관 {i + 1} <span className="font-normal opacity-70">({r.model})</span>
+                  </span>
                 </button>
               ))}
             </div>
           </div>
 
-          {/* 50:50 분할 뷰 */}
           <div className="flex min-h-0 flex-1">
             {/* 왼쪽: PDF 뷰어 */}
-            <div className="flex w-1/2 flex-col border-r border-gray-200">
+            <div className="flex w-1/4 flex-col border-r border-gray-200">
               <div className="flex shrink-0 items-center gap-2 border-b border-gray-100 bg-gray-50 px-4 py-2">
                 <span className="text-[11px] font-medium tracking-wide text-gray-400 uppercase">
                   제출 서류
@@ -286,7 +286,7 @@ export default function ResultPage() {
             </div>
 
             {/* 오른쪽: AI 결과 */}
-            <div className="flex w-1/2 flex-col">
+            <div className="flex w-3/4 flex-col">
               <div className="flex shrink-0 items-center gap-2 border-b border-gray-100 bg-gray-50 px-4 py-2">
                 <span className="text-[11px] font-medium tracking-wide text-gray-400 uppercase">
                   AI 분석 결과
