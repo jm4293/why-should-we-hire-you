@@ -66,13 +66,13 @@ export function HowItWorksSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="bg-white px-6 py-32">
+    <section ref={sectionRef} className="bg-background px-6 py-32">
       <div className="mx-auto max-w-5xl">
         <div ref={titleRef} className="mb-20 text-center" style={{ opacity: 0 }}>
-          <p className="mb-4 text-sm font-medium tracking-[0.2em] text-gray-400 uppercase">
+          <p className="mb-4 text-sm font-medium tracking-[0.2em] text-muted-foreground/70 uppercase">
             사용 방법
           </p>
-          <h2 className="text-4xl font-semibold tracking-tight text-gray-900 md:text-5xl">
+          <h2 className="text-4xl font-semibold tracking-tight text-primary md:text-5xl">
             세 단계면 충분합니다
           </h2>
         </div>
@@ -90,17 +90,17 @@ export function HowItWorksSection() {
                 <div
                   className={cn(
                     "mb-6 flex h-14 w-14 items-center justify-center rounded-2xl",
-                    "bg-gray-900 text-white"
+                    "bg-primary text-primary-foreground"
                   )}
                 >
                   <Icon size={22} />
                 </div>
 
-                <p className="mb-1 text-xs font-medium tracking-widest text-gray-400">
+                <p className="mb-1 text-xs font-medium tracking-widest text-muted-foreground/70">
                   STEP {item.step}
                 </p>
-                <h3 className="mb-3 text-xl font-semibold text-gray-900">{item.title}</h3>
-                <p className="text-base leading-relaxed text-gray-500">{item.desc}</p>
+                <h3 className="mb-3 text-xl font-semibold text-primary">{item.title}</h3>
+                <p className="text-base leading-relaxed text-muted-foreground">{item.desc}</p>
               </div>
             );
           })}

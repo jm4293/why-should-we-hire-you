@@ -20,9 +20,9 @@ const PROVIDER_LABELS: Record<AIProvider, string> = {
 };
 
 const PROVIDER_COLORS: Record<AIProvider, string> = {
-  openai: "bg-gray-100 text-gray-700",
-  anthropic: "bg-gray-100 text-gray-700",
-  google: "bg-gray-100 text-gray-700",
+  openai: "bg-muted text-gray-700",
+  anthropic: "bg-muted text-gray-700",
+  google: "bg-muted text-gray-700",
 };
 
 const PERSONA_EXAMPLES = [
@@ -139,15 +139,15 @@ export function Step4Persona({ value, onChange }: Step4PersonaProps) {
     return (
       <div className="space-y-6">
         <div>
-          <h2 className="text-xl font-semibold text-gray-900">AI 면접관 설정</h2>
+          <h2 className="text-xl font-semibold text-primary">AI 면접관 설정</h2>
         </div>
-        <div className="rounded-2xl border border-gray-200 bg-gray-50 p-6 text-center">
-          <Info size={24} className="mx-auto mb-3 text-gray-400" />
-          <p className="text-sm font-medium text-gray-800">등록된 API 키가 없습니다.</p>
-          <p className="mt-1 text-xs text-gray-500">설정 페이지에서 API 키를 먼저 등록해주세요.</p>
+        <div className="rounded-2xl border border-border bg-muted/50 p-6 text-center">
+          <Info size={24} className="mx-auto mb-3 text-muted-foreground/70" />
+          <p className="text-sm font-medium text-primary/90">등록된 API 키가 없습니다.</p>
+          <p className="mt-1 text-xs text-muted-foreground">설정 페이지에서 API 키를 먼저 등록해주세요.</p>
           <Link
             href="/settings"
-            className="mt-4 inline-block rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700"
+            className="mt-4 inline-block rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-gray-700"
           >
             설정 페이지 이동
           </Link>
@@ -161,16 +161,16 @@ export function Step4Persona({ value, onChange }: Step4PersonaProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-semibold text-gray-900">AI 면접관 설정</h2>
-        <p className="mt-1 text-sm text-gray-500">
+        <h2 className="text-xl font-semibold text-primary">AI 면접관 설정</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
           사용할 면접관을 선택하고, 각 면접관이 어떤 기준으로 이력서를 볼지 설정하세요.
         </p>
       </div>
 
       {/* 이전에 저장한 설정 */}
       {savedPersonas.length > 0 && (
-        <div className="rounded-2xl border border-gray-200 bg-gray-50 p-4">
-          <p className="mb-3 text-xs font-medium text-gray-600">이전에 저장한 설정</p>
+        <div className="rounded-2xl border border-border bg-muted/50 p-4">
+          <p className="mb-3 text-xs font-medium text-muted-foreground">이전에 저장한 설정</p>
           <div className="flex flex-wrap gap-2">
             {savedPersonas.map((sp) => (
               <div key={sp.id} className="flex items-center gap-1">
@@ -186,13 +186,13 @@ export function Step4Persona({ value, onChange }: Step4PersonaProps) {
                       });
                     }
                   }}
-                  className="rounded-full border border-gray-200 bg-white px-3 py-1 text-xs text-gray-600 hover:border-gray-400"
+                  className="rounded-full border border-border bg-background px-3 py-1 text-xs text-muted-foreground hover:border-gray-400"
                 >
                   {sp.name} ({PROVIDER_LABELS[sp.provider]})
                 </button>
                 <button
                   onClick={() => handleDeleteSaved(sp.id)}
-                  className="text-gray-300 hover:text-gray-600"
+                  className="text-muted-foreground/50 hover:text-muted-foreground"
                 >
                   <Trash2 size={11} />
                 </button>
@@ -212,8 +212,8 @@ export function Step4Persona({ value, onChange }: Step4PersonaProps) {
             <div
               key={slot.id}
               className={cn(
-                "overflow-hidden rounded-2xl border bg-white transition-opacity",
-                slot.enabled ? "border-gray-200" : "border-gray-100 opacity-50"
+                "overflow-hidden rounded-2xl border bg-background transition-opacity",
+                slot.enabled ? "border-border" : "border-border/50 opacity-50"
               )}
             >
               {/* 헤더 */}
@@ -227,8 +227,8 @@ export function Step4Persona({ value, onChange }: Step4PersonaProps) {
                   className={cn(
                     "flex h-5 w-5 shrink-0 items-center justify-center rounded border transition-colors",
                     slot.enabled
-                      ? "border-gray-900 bg-gray-900 text-white"
-                      : "border-gray-300 bg-white",
+                      ? "border-gray-900 bg-primary text-primary-foreground"
+                      : "border-border bg-background",
                     isLast && "cursor-not-allowed opacity-50"
                   )}
                 >
@@ -251,14 +251,14 @@ export function Step4Persona({ value, onChange }: Step4PersonaProps) {
                   onClick={() => slot.enabled && setExpandedId(isExpanded ? null : slot.id)}
                   disabled={!slot.enabled}
                 >
-                  <span className="text-sm font-medium text-gray-400">
+                  <span className="text-sm font-medium text-muted-foreground/70">
                     면접관 {idx + 1}{" "}
                     <span className="text-xs font-normal opacity-70">({slot.model})</span>
                   </span>
                   <span
                     className={cn(
                       "flex-1 text-sm font-semibold",
-                      slot.name ? "text-gray-900" : "text-gray-400"
+                      slot.name ? "text-primary" : "text-muted-foreground/70"
                     )}
                   >
                     {slot.enabled ? slot.name || "직책 / 역할을 입력하세요" : "비활성화"}
@@ -271,19 +271,19 @@ export function Step4Persona({ value, onChange }: Step4PersonaProps) {
                   </Badge>
                   {slot.enabled &&
                     (isExpanded ? (
-                      <ChevronUp size={15} className="text-gray-400" />
+                      <ChevronUp size={15} className="text-muted-foreground/70" />
                     ) : (
-                      <ChevronDown size={15} className="text-gray-400" />
+                      <ChevronDown size={15} className="text-muted-foreground/70" />
                     ))}
                 </button>
               </div>
 
               {/* 펼쳐진 내용 */}
               {isExpanded && slot.enabled && (
-                <div className="space-y-4 border-t border-gray-100 px-5 pt-4 pb-5">
+                <div className="space-y-4 border-t border-border/50 px-5 pt-4 pb-5">
                   {/* 빠르게 선택하기 */}
                   <div>
-                    <p className="mb-2 text-xs text-gray-500">빠르게 선택하기</p>
+                    <p className="mb-2 text-xs text-muted-foreground">빠르게 선택하기</p>
                     <div className="flex flex-wrap gap-2">
                       {PERSONA_EXAMPLES.map((ex) => (
                         <button
@@ -292,8 +292,8 @@ export function Step4Persona({ value, onChange }: Step4PersonaProps) {
                           className={cn(
                             "rounded-full border px-3 py-1 text-xs transition-colors",
                             slot.name === ex.name
-                              ? "border-gray-900 bg-gray-900 text-white"
-                              : "border-gray-200 text-gray-500 hover:border-gray-400"
+                              ? "border-gray-900 bg-primary text-primary-foreground"
+                              : "border-border text-muted-foreground hover:border-gray-400"
                           )}
                         >
                           {ex.name}
@@ -303,7 +303,7 @@ export function Step4Persona({ value, onChange }: Step4PersonaProps) {
                   </div>
 
                   <div>
-                    <Label className="mb-1.5 text-xs text-gray-600">직책 / 역할</Label>
+                    <Label className="mb-1.5 text-xs text-muted-foreground">직책 / 역할</Label>
                     <Input
                       value={slot.name}
                       onChange={(e) => updateSlot(slot.id, { name: e.target.value })}
@@ -313,7 +313,7 @@ export function Step4Persona({ value, onChange }: Step4PersonaProps) {
                   </div>
 
                   <div>
-                    <Label className="mb-1.5 text-xs text-gray-600">
+                    <Label className="mb-1.5 text-xs text-muted-foreground">
                       이 면접관은 무엇을 중점으로 평가하나요?
                     </Label>
                     <Textarea
@@ -330,8 +330,8 @@ export function Step4Persona({ value, onChange }: Step4PersonaProps) {
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <p className="text-xs text-gray-400">
-                      사용 모델: <span className="text-gray-600">{slot.model}</span>
+                    <p className="text-xs text-muted-foreground/70">
+                      사용 모델: <span className="text-muted-foreground">{slot.model}</span>
                     </p>
                     <Button
                       variant="outline"
@@ -351,8 +351,8 @@ export function Step4Persona({ value, onChange }: Step4PersonaProps) {
       </div>
 
       {/* 안내 문구 */}
-      <p className="text-xs text-gray-400">
-        ✓ 선택된 면접관: <span className="font-medium text-gray-600">{enabledCount}명</span>
+      <p className="text-xs text-muted-foreground/70">
+        ✓ 선택된 면접관: <span className="font-medium text-muted-foreground">{enabledCount}명</span>
         {value.some((p) => !p.name) && (
           <span className="ml-2 text-red-400">
             · 직책/역할을 입력해야 다음으로 넘어갈 수 있습니다.

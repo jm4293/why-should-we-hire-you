@@ -17,9 +17,9 @@ function MobileGuard({ children }: { children: React.ReactNode }) {
     <>
       {/* 모바일 안내 */}
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 p-8 md:hidden">
-        <Monitor size={40} className="text-gray-300" />
-        <h2 className="text-xl font-semibold text-gray-900">데스크탑에서 이용하세요</h2>
-        <p className="text-center text-sm leading-relaxed text-gray-500">
+        <Monitor size={40} className="text-muted-foreground/50" />
+        <h2 className="text-xl font-semibold text-primary">데스크탑에서 이용하세요</h2>
+        <p className="text-center text-sm leading-relaxed text-muted-foreground">
           이 서비스는 넓은 화면에서 최적화되어 있습니다.
           <br />
           PC 또는 노트북에서 접속해주세요.
@@ -66,7 +66,7 @@ export default function AnalyzePage() {
           <DialogHeader>
             <DialogTitle className="text-base">API 키가 필요합니다</DialogTitle>
           </DialogHeader>
-          <p className="text-sm leading-relaxed text-gray-500">
+          <p className="text-sm leading-relaxed text-muted-foreground">
             서비스를 이용하려면 OpenAI, Anthropic, Google 중 하나 이상의 API 키를 먼저 등록해야
             합니다. 설정 페이지에서 발급 방법도 확인할 수 있습니다.
           </p>
@@ -85,11 +85,11 @@ export default function AnalyzePage() {
       </Dialog>
 
       {/* 상단 네비 */}
-      <header className="flex h-14 shrink-0 items-center justify-between border-b border-gray-200 bg-white px-6">
+      <header className="flex h-14 shrink-0 items-center justify-between border-b border-border bg-background px-6">
         <div className="flex items-center gap-3">
           <button
             onClick={() => router.push("/")}
-            className="text-sm font-semibold text-gray-900 hover:text-gray-600"
+            className="text-sm font-semibold text-primary hover:text-muted-foreground"
           >
             Why Should We Hire You?
           </button>
@@ -107,7 +107,7 @@ export default function AnalyzePage() {
             variant="ghost"
             size="sm"
             onClick={() => router.push("/settings")}
-            className="gap-1.5 text-xs text-gray-500"
+            className="gap-1.5 text-xs text-muted-foreground"
           >
             <Settings size={14} />
             설정

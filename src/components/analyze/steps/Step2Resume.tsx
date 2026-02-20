@@ -107,7 +107,7 @@ export function Step2Resume({ value, onChange }: Step2ResumeProps) {
       <div className="mb-2 flex items-center gap-1.5">
         <span className="text-sm font-medium text-gray-700">{label}</span>
         {required && <span className="text-xs font-medium text-red-500">필수</span>}
-        {!required && <span className="text-xs text-gray-400">선택</span>}
+        {!required && <span className="text-xs text-muted-foreground/70">선택</span>}
       </div>
 
       <div
@@ -133,16 +133,16 @@ export function Step2Resume({ value, onChange }: Step2ResumeProps) {
             : error
               ? "border-red-300 bg-red-50"
               : hasFile
-                ? "border-gray-300 bg-gray-50"
-                : "border-gray-200 bg-white hover:border-gray-400 hover:bg-gray-50"
+                ? "border-border bg-muted/50"
+                : "border-border bg-background hover:border-gray-400 hover:bg-muted/50"
         )}
       >
         {isParsing ? (
-          <Loader2 size={20} className="animate-spin text-gray-400" />
+          <Loader2 size={20} className="animate-spin text-muted-foreground/70" />
         ) : (
-          <Upload size={20} className={cn(isDragActive ? "text-blue-500" : "text-gray-400")} />
+          <Upload size={20} className={cn(isDragActive ? "text-blue-500" : "text-muted-foreground/70")} />
         )}
-        <p className={cn("text-xs", isDragActive ? "font-medium text-blue-600" : "text-gray-500")}>
+        <p className={cn("text-xs", isDragActive ? "font-medium text-blue-600" : "text-muted-foreground")}>
           {isParsing
             ? "파싱 중..."
             : isDragActive
@@ -176,13 +176,13 @@ export function Step2Resume({ value, onChange }: Step2ResumeProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-semibold text-gray-900">내 서류</h2>
-        <p className="mt-1 text-sm text-gray-500">
+        <h2 className="text-xl font-semibold text-primary">내 서류</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
           이력서는 필수이며, 포트폴리오나 경력기술서는 선택입니다. PDF 파일만 지원합니다.
         </p>
       </div>
 
-      <div className="space-y-5 rounded-2xl border border-gray-200 bg-white p-6">
+      <div className="space-y-5 rounded-2xl border border-border bg-background p-6">
         {/* 이력서 */}
         <DropZone
           type="resume"
@@ -198,21 +198,21 @@ export function Step2Resume({ value, onChange }: Step2ResumeProps) {
 
         {/* 업로드된 이력서 */}
         {resume && (
-          <div className="flex items-center gap-3 rounded-lg bg-gray-50 px-4 py-3">
-            <FileText size={16} className="shrink-0 text-gray-500" />
+          <div className="flex items-center gap-3 rounded-lg bg-muted/50 px-4 py-3">
+            <FileText size={16} className="shrink-0 text-muted-foreground" />
             <p className="flex-1 truncate text-sm text-gray-700">{resume.name}</p>
             <Button
               variant="ghost"
               size="sm"
               onClick={() => removeFile(resume.name)}
-              className="h-7 w-7 p-0 text-gray-400 hover:text-gray-900"
+              className="h-7 w-7 p-0 text-muted-foreground/70 hover:text-primary"
             >
               <X size={14} />
             </Button>
           </div>
         )}
 
-        <div className="border-t border-gray-100" />
+        <div className="border-t border-border/50" />
 
         {/* 추가 서류 */}
         <DropZone
@@ -231,14 +231,14 @@ export function Step2Resume({ value, onChange }: Step2ResumeProps) {
         {extras.length > 0 && (
           <div className="space-y-2">
             {extras.map((f) => (
-              <div key={f.name} className="flex items-center gap-3 rounded-lg bg-gray-50 px-4 py-3">
-                <FileText size={16} className="shrink-0 text-gray-500" />
+              <div key={f.name} className="flex items-center gap-3 rounded-lg bg-muted/50 px-4 py-3">
+                <FileText size={16} className="shrink-0 text-muted-foreground" />
                 <p className="flex-1 truncate text-sm text-gray-700">{f.name}</p>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => removeFile(f.name)}
-                  className="h-7 w-7 p-0 text-gray-400 hover:text-gray-900"
+                  className="h-7 w-7 p-0 text-muted-foreground/70 hover:text-primary"
                 >
                   <X size={14} />
                 </Button>
@@ -248,7 +248,7 @@ export function Step2Resume({ value, onChange }: Step2ResumeProps) {
         )}
       </div>
 
-      <p className="text-xs text-gray-400">
+      <p className="text-xs text-muted-foreground/70">
         스캔된 이미지 형태의 PDF는 텍스트 추출이 불가능합니다. 텍스트 선택이 가능한 PDF를
         사용해주세요.
       </p>

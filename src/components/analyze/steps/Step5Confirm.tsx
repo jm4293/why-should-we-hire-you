@@ -21,15 +21,15 @@ export function Step5Confirm({ input }: Step5ConfirmProps) {
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-xl font-semibold text-gray-900">최종 확인</h2>
-        <p className="mt-1 text-sm text-gray-500">아래 내용을 확인한 후 분석을 시작하세요.</p>
+        <h2 className="text-xl font-semibold text-primary">최종 확인</h2>
+        <p className="mt-1 text-sm text-muted-foreground">아래 내용을 확인한 후 분석을 시작하세요.</p>
       </div>
 
       {/* 회사 정보 */}
-      <div className="space-y-3 rounded-2xl border border-gray-200 bg-white p-5">
+      <div className="space-y-3 rounded-2xl border border-border bg-background p-5">
         <div className="flex items-center gap-2">
-          <Globe size={15} className="text-gray-500" />
-          <span className="text-sm font-semibold text-gray-900">회사 정보</span>
+          <Globe size={15} className="text-muted-foreground" />
+          <span className="text-sm font-semibold text-primary">회사 정보</span>
         </div>
 
         <div className="space-y-3">
@@ -37,21 +37,21 @@ export function Step5Confirm({ input }: Step5ConfirmProps) {
           <div className="space-y-1">
             <div className="flex items-center gap-1.5">
               {companyInfo?.jobContent ? (
-                <CheckCircle size={12} className="shrink-0 text-gray-500" />
+                <CheckCircle size={12} className="shrink-0 text-muted-foreground" />
               ) : (
-                <AlertCircle size={12} className="shrink-0 text-gray-400" />
+                <AlertCircle size={12} className="shrink-0 text-muted-foreground/70" />
               )}
-              <span className="shrink-0 text-xs text-gray-500">채용 공고 URL</span>
+              <span className="shrink-0 text-xs text-muted-foreground">채용 공고 URL</span>
               {!companyInfo?.jobContent && (
-                <span className="text-xs text-gray-400">(내용 미불러옴)</span>
+                <span className="text-xs text-muted-foreground/70">(내용 미불러옴)</span>
               )}
             </div>
             <div className="space-y-0.5 pl-4">
-              <p className={cn("text-xs", companyInfo?.jobUrl ? "text-gray-700" : "text-gray-400")}>
+              <p className={cn("text-xs", companyInfo?.jobUrl ? "text-gray-700" : "text-muted-foreground/70")}>
                 {companyInfo?.jobUrl || "미입력"}
               </p>
               {companyInfo?.jobContent && (
-                <p className="text-xs leading-relaxed text-gray-400">
+                <p className="text-xs leading-relaxed text-muted-foreground/70">
                   {contentPreview(companyInfo.jobContent)}
                 </p>
               )}
@@ -62,26 +62,26 @@ export function Step5Confirm({ input }: Step5ConfirmProps) {
           <div className="space-y-1">
             <div className="flex items-center gap-1.5">
               {companyInfo?.companyContent ? (
-                <CheckCircle size={12} className="shrink-0 text-gray-500" />
+                <CheckCircle size={12} className="shrink-0 text-muted-foreground" />
               ) : (
-                <AlertCircle size={12} className="shrink-0 text-gray-400" />
+                <AlertCircle size={12} className="shrink-0 text-muted-foreground/70" />
               )}
-              <span className="shrink-0 text-xs text-gray-500">회사 소개 URL</span>
+              <span className="shrink-0 text-xs text-muted-foreground">회사 소개 URL</span>
               {!companyInfo?.companyContent && (
-                <span className="text-xs text-gray-400">(내용 미불러옴)</span>
+                <span className="text-xs text-muted-foreground/70">(내용 미불러옴)</span>
               )}
             </div>
             <div className="space-y-0.5 pl-4">
               <p
                 className={cn(
                   "text-xs",
-                  companyInfo?.companyUrl ? "text-gray-700" : "text-gray-400"
+                  companyInfo?.companyUrl ? "text-gray-700" : "text-muted-foreground/70"
                 )}
               >
                 {companyInfo?.companyUrl || "미입력"}
               </p>
               {companyInfo?.companyContent && (
-                <p className="text-xs leading-relaxed text-gray-400">
+                <p className="text-xs leading-relaxed text-muted-foreground/70">
                   {contentPreview(companyInfo.companyContent)}
                 </p>
               )}
@@ -91,23 +91,23 @@ export function Step5Confirm({ input }: Step5ConfirmProps) {
       </div>
 
       {/* 내 서류 */}
-      <div className="space-y-3 rounded-2xl border border-gray-200 bg-white p-5">
+      <div className="space-y-3 rounded-2xl border border-border bg-background p-5">
         <div className="flex items-center gap-2">
-          <FileText size={15} className="text-gray-500" />
-          <span className="text-sm font-semibold text-gray-900">내 서류</span>
+          <FileText size={15} className="text-muted-foreground" />
+          <span className="text-sm font-semibold text-primary">내 서류</span>
         </div>
         <div className="space-y-1.5">
           {resumeFiles.length === 0 ? (
-            <p className="text-xs text-gray-400">업로드된 파일 없음</p>
+            <p className="text-xs text-muted-foreground/70">업로드된 파일 없음</p>
           ) : (
             resumeFiles.map((f) => (
               <div key={f.name} className="flex items-center gap-2 text-xs">
-                <CheckCircle size={12} className="shrink-0 text-gray-500" />
-                <span className="shrink-0 text-gray-500">
+                <CheckCircle size={12} className="shrink-0 text-muted-foreground" />
+                <span className="shrink-0 text-muted-foreground">
                   {f.type === "resume" ? "이력서" : "추가 서류"}
                 </span>
                 <span className="truncate text-gray-700">{f.name}</span>
-                <span className="shrink-0 text-gray-400">
+                <span className="shrink-0 text-muted-foreground/70">
                   ({Math.round(f.text.length / 400)}페이지 분량)
                 </span>
               </div>
@@ -117,21 +117,21 @@ export function Step5Confirm({ input }: Step5ConfirmProps) {
       </div>
 
       {/* 자소서 문항 */}
-      <div className="space-y-3 rounded-2xl border border-gray-200 bg-white p-5">
+      <div className="space-y-3 rounded-2xl border border-border bg-background p-5">
         <div className="flex items-center gap-2">
-          <MessageSquare size={15} className="text-gray-500" />
-          <span className="text-sm font-semibold text-gray-900">자소서 문항</span>
-          <span className="text-xs text-gray-400">({coverLetterItems.length}개)</span>
+          <MessageSquare size={15} className="text-muted-foreground" />
+          <span className="text-sm font-semibold text-primary">자소서 문항</span>
+          <span className="text-xs text-muted-foreground/70">({coverLetterItems.length}개)</span>
         </div>
         {coverLetterItems.length === 0 ? (
-          <p className="text-xs text-gray-400">자소서 초안이 생략됩니다.</p>
+          <p className="text-xs text-muted-foreground/70">자소서 초안이 생략됩니다.</p>
         ) : (
           <div className="space-y-2">
             {coverLetterItems.map((item, i) => (
               <div key={item.id} className="flex items-start gap-2 text-xs">
-                <CheckCircle size={12} className="mt-0.5 shrink-0 text-gray-500" />
+                <CheckCircle size={12} className="mt-0.5 shrink-0 text-muted-foreground" />
                 <div>
-                  <span className="text-gray-400">
+                  <span className="text-muted-foreground/70">
                     문항 {i + 1} · 최대 {item.maxLength}자
                   </span>
                   <p className="mt-0.5 text-gray-700">
@@ -146,25 +146,25 @@ export function Step5Confirm({ input }: Step5ConfirmProps) {
       </div>
 
       {/* 면접관 */}
-      <div className="space-y-3 rounded-2xl border border-gray-200 bg-white p-5">
+      <div className="space-y-3 rounded-2xl border border-border bg-background p-5">
         <div className="flex items-center gap-2">
-          <Users size={15} className="text-gray-500" />
-          <span className="text-sm font-semibold text-gray-900">AI 면접관</span>
-          <span className="text-xs text-gray-400">({personas.length}명)</span>
+          <Users size={15} className="text-muted-foreground" />
+          <span className="text-sm font-semibold text-primary">AI 면접관</span>
+          <span className="text-xs text-muted-foreground/70">({personas.length}명)</span>
         </div>
         <div className="space-y-3">
           {personas.map((p) => (
             <div key={p.id} className="flex items-start gap-2 text-xs">
-              <CheckCircle size={12} className="mt-0.5 shrink-0 text-gray-500" />
+              <CheckCircle size={12} className="mt-0.5 shrink-0 text-muted-foreground" />
               <div>
                 <div className="flex items-center gap-1.5">
                   <span className="font-medium text-gray-700">{p.name || "직책 미설정"}</span>
-                  <span className="text-gray-400">
+                  <span className="text-muted-foreground/70">
                     · {PROVIDER_LABELS[p.provider]} · {p.model}
                   </span>
                 </div>
                 {p.description && (
-                  <p className="mt-0.5 leading-relaxed text-gray-400">
+                  <p className="mt-0.5 leading-relaxed text-muted-foreground/70">
                     {p.description.slice(0, 80)}
                     {p.description.length > 80 ? "..." : ""}
                   </p>
@@ -176,12 +176,12 @@ export function Step5Confirm({ input }: Step5ConfirmProps) {
       </div>
 
       {/* 비용 안내 */}
-      <div className="rounded-2xl border border-gray-200 bg-gray-50 p-5">
+      <div className="rounded-2xl border border-border bg-muted/50 p-5">
         <div className="flex gap-3">
-          <AlertCircle size={16} className="mt-0.5 shrink-0 text-gray-500" />
+          <AlertCircle size={16} className="mt-0.5 shrink-0 text-muted-foreground" />
           <div className="text-sm">
-            <p className="font-medium text-gray-800">분석 시작 전 확인하세요</p>
-            <ul className="mt-1.5 space-y-1 text-xs text-gray-500">
+            <p className="font-medium text-primary/90">분석 시작 전 확인하세요</p>
+            <ul className="mt-1.5 space-y-1 text-xs text-muted-foreground">
               <li>분석을 시작하면 등록된 API 키로 비용이 발생합니다.</li>
               <li>
                 면접관 {personas.length}명 기준 약 ${(personas.length * 0.05).toFixed(2)}~$

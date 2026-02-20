@@ -64,18 +64,18 @@ export function ProblemSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="bg-gray-50 px-6 py-32">
+    <section ref={sectionRef} className="bg-muted/50 px-6 py-32">
       <div className="mx-auto max-w-5xl">
         <div ref={titleRef} className="mb-20 text-center" style={{ opacity: 0 }}>
-          <p className="mb-4 text-sm font-medium tracking-[0.2em] text-gray-400 uppercase">
+          <p className="mb-4 text-sm font-medium tracking-[0.2em] text-muted-foreground/70 uppercase">
             문제 인식
           </p>
-          <h2 className="text-4xl font-semibold tracking-tight text-gray-900 md:text-5xl">
+          <h2 className="text-4xl font-semibold tracking-tight text-primary md:text-5xl">
             서류 탈락, 이유를
             <br />
             알고 계신가요?
           </h2>
-          <p className="mx-auto mt-6 max-w-lg text-lg leading-relaxed text-gray-500">
+          <p className="mx-auto mt-6 max-w-lg text-lg leading-relaxed text-muted-foreground">
             매번 열심히 준비하지만 결과는 달라지지 않는다면, 방향이 잘못됐을 수 있습니다.
           </p>
         </div>
@@ -84,13 +84,13 @@ export function ProblemSection() {
           {problems.map((item) => (
             <div
               key={item.stat}
-              className="rounded-2xl bg-white p-8 shadow-sm"
+              className="rounded-2xl bg-background p-8 shadow-sm"
               style={{ opacity: 0 }}
             >
-              <p className="mb-3 text-5xl font-semibold tracking-tight text-gray-900">
+              <p className="mb-3 text-5xl font-semibold tracking-tight text-primary">
                 {item.stat}
               </p>
-              <p className="text-base leading-relaxed text-gray-500">{item.desc}</p>
+              <p className="text-base leading-relaxed text-muted-foreground">{item.desc}</p>
             </div>
           ))}
         </div>

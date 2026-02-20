@@ -151,12 +151,12 @@ export function AnalyzeWizard() {
       </div>
 
       {/* 하단 네비게이션 */}
-      <div className="flex items-center justify-between border-t border-gray-100 pt-5">
+      <div className="flex items-center justify-between border-t border-border/50 pt-5">
         <Button
           variant="ghost"
           onClick={goPrev}
           disabled={currentStep === 1}
-          className="gap-1.5 text-sm text-gray-500"
+          className="gap-1.5 text-sm text-muted-foreground"
         >
           <ChevronLeft size={15} />
           이전
@@ -168,7 +168,7 @@ export function AnalyzeWizard() {
             <ChevronRight size={15} />
           </Button>
         ) : (
-          <Button onClick={handleStart} className="gap-2 bg-gray-900 text-sm hover:bg-gray-700">
+          <Button onClick={handleStart} className="gap-2 bg-primary text-sm hover:bg-gray-700">
             <Zap size={15} />
             분석 시작
           </Button>

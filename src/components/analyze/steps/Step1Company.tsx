@@ -81,12 +81,12 @@ export function Step1Company({ value, onChange }: Step1CompanyProps) {
           {required ? (
             <span className="text-xs font-medium text-red-500">필수</span>
           ) : (
-            <span className="text-xs text-gray-400">선택</span>
+            <span className="text-xs text-muted-foreground/70">선택</span>
           )}
         </div>
         <div className="flex gap-2">
           <div className="relative flex-1">
-            <Globe size={14} className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400" />
+            <Globe size={14} className="absolute top-1/2 left-3 -translate-y-1/2 text-muted-foreground/70" />
             <Input
               value={urlValue ?? ""}
               onChange={(e) =>
@@ -113,19 +113,19 @@ export function Step1Company({ value, onChange }: Step1CompanyProps) {
 
         {/* 상태 표시 */}
         {crawlState === "success" && isLoaded && (
-          <div className="mt-2 flex items-center gap-1.5 text-xs text-gray-500">
+          <div className="mt-2 flex items-center gap-1.5 text-xs text-muted-foreground">
             <CheckCircle size={12} />
             내용을 성공적으로 불러왔습니다.
           </div>
         )}
         {crawlState === "error" && error && (
-          <div className="mt-2 flex items-center gap-1.5 text-xs text-gray-500">
+          <div className="mt-2 flex items-center gap-1.5 text-xs text-muted-foreground">
             <XCircle size={12} />
             {error}
           </div>
         )}
         {urlValue && !isLoaded && crawlState === "idle" && (
-          <div className="mt-2 flex items-center gap-1.5 text-xs text-gray-500">
+          <div className="mt-2 flex items-center gap-1.5 text-xs text-muted-foreground">
             <span className="font-medium">→</span>
             <span>"불러오기"를 눌러야 AI가 내용을 분석할 수 있습니다.</span>
           </div>
@@ -137,13 +137,13 @@ export function Step1Company({ value, onChange }: Step1CompanyProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-semibold text-gray-900">회사 정보</h2>
-        <p className="mt-1 text-sm text-gray-500">
+        <h2 className="text-xl font-semibold text-primary">회사 정보</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
           채용 공고 URL은 필수입니다. 회사 소개 URL은 선택 사항입니다.
         </p>
       </div>
 
-      <div className={cn("space-y-5 rounded-2xl border border-gray-200 bg-white p-6")}>
+      <div className={cn("space-y-5 rounded-2xl border border-border bg-background p-6")}>
         <URLInput
           type="job"
           label="채용 공고 URL"
@@ -163,7 +163,7 @@ export function Step1Company({ value, onChange }: Step1CompanyProps) {
       </div>
 
       {/* 안내 */}
-      <p className="text-xs text-gray-400">
+      <p className="text-xs text-muted-foreground/70">
         일부 사이트는 크롤링이 제한될 수 있습니다. 불러오기에 실패하면 해당 내용을 AI가 분석하지
         못할 수 있습니다.
       </p>

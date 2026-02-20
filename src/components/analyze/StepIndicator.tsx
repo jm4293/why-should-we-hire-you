@@ -29,15 +29,15 @@ export function StepIndicator({ currentStep }: StepIndicatorProps) {
               <div
                 className={cn(
                   "flex h-8 w-8 items-center justify-center rounded-full text-xs font-medium transition-all",
-                  done && "bg-gray-900 text-white",
-                  active && "bg-gray-900 text-white ring-4 ring-gray-900/10",
-                  !done && !active && "bg-gray-100 text-gray-400"
+                  done && "bg-primary text-primary-foreground",
+                  active && "bg-primary text-primary-foreground ring-4 ring-ring/10",
+                  !done && !active && "bg-muted text-muted-foreground/70"
                 )}
               >
                 {done ? <Check size={14} /> : step.number}
               </div>
               <span
-                className={cn("text-xs", active ? "font-medium text-gray-900" : "text-gray-400")}
+                className={cn("text-xs", active ? "font-medium text-primary" : "text-muted-foreground/70")}
               >
                 {step.label}
               </span>
@@ -48,7 +48,7 @@ export function StepIndicator({ currentStep }: StepIndicatorProps) {
               <div
                 className={cn(
                   "mb-5 h-px w-12 transition-all md:w-16",
-                  done ? "bg-gray-900" : "bg-gray-200"
+                  done ? "bg-primary" : "bg-gray-200"
                 )}
               />
             )}

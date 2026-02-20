@@ -62,13 +62,13 @@ export function NoticeSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="bg-white px-6 py-32">
+    <section ref={sectionRef} className="bg-background px-6 py-32">
       <div className="mx-auto max-w-3xl">
         <div ref={titleRef} className="mb-16 text-center" style={{ opacity: 0 }}>
-          <p className="mb-4 text-sm font-medium tracking-[0.2em] text-gray-400 uppercase">
+          <p className="mb-4 text-sm font-medium tracking-[0.2em] text-muted-foreground/70 uppercase">
             사용 전 확인
           </p>
-          <h2 className="text-4xl font-semibold tracking-tight text-gray-900 md:text-5xl">
+          <h2 className="text-4xl font-semibold tracking-tight text-primary md:text-5xl">
             시작 전에 알아두세요
           </h2>
         </div>
@@ -78,12 +78,12 @@ export function NoticeSection() {
             const Icon = item.icon;
             return (
               <div key={item.title} className="flex gap-5" style={{ opacity: 0 }}>
-                <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gray-100 text-gray-600">
+                <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-muted text-muted-foreground">
                   <Icon size={18} />
                 </div>
                 <div>
-                  <p className="mb-1.5 text-base font-semibold text-gray-900">{item.title}</p>
-                  <p className="text-base leading-relaxed text-gray-500">{item.desc}</p>
+                  <p className="mb-1.5 text-base font-semibold text-primary">{item.title}</p>
+                  <p className="text-base leading-relaxed text-muted-foreground">{item.desc}</p>
                 </div>
               </div>
             );

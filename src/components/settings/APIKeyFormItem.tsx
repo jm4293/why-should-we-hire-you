@@ -91,14 +91,14 @@ export function APIKeyFormItem({ config, onSaved }: APIKeyFormItemProps) {
   };
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-6">
+    <div className="rounded-2xl border border-border bg-background p-6">
       {/* 헤더 */}
       <div className="mb-5 flex items-start justify-between">
         <div>
           <div className="flex items-center gap-2">
-            <h3 className="text-base font-semibold text-gray-900">{config.label}</h3>
+            <h3 className="text-base font-semibold text-primary">{config.label}</h3>
             {hasSaved ? (
-              <Badge variant="outline" className="border-gray-200 bg-gray-50 text-xs text-gray-600">
+              <Badge variant="outline" className="border-border bg-muted/50 text-xs text-muted-foreground">
                 등록됨
               </Badge>
             ) : (
@@ -110,14 +110,14 @@ export function APIKeyFormItem({ config, onSaved }: APIKeyFormItemProps) {
               </Badge>
             )}
           </div>
-          <p className="mt-0.5 text-sm text-gray-500">{config.description}</p>
+          <p className="mt-0.5 text-sm text-muted-foreground">{config.description}</p>
           {!hasSaved && (
-            <p className="mt-1 text-xs text-gray-400">이 키를 등록하면 면접관 1명이 추가됩니다.</p>
+            <p className="mt-1 text-xs text-muted-foreground/70">이 키를 등록하면 면접관 1명이 추가됩니다.</p>
           )}
         </div>
         <button
           onClick={() => setShowGuide((v) => !v)}
-          className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-700"
+          className="flex items-center gap-1 text-xs text-muted-foreground/70 hover:text-gray-700"
         >
           발급 방법
           <ExternalLink size={12} />
@@ -126,11 +126,11 @@ export function APIKeyFormItem({ config, onSaved }: APIKeyFormItemProps) {
 
       {/* 발급 가이드 */}
       {showGuide && (
-        <div className="mb-5 rounded-xl bg-gray-50 p-4">
+        <div className="mb-5 rounded-xl bg-muted/50 p-4">
           <p className="mb-3 text-xs font-medium text-gray-700">API 키 발급 방법</p>
           <ol className="space-y-1.5">
             {config.guideSteps.map((step, i) => (
-              <li key={i} className="flex gap-2 text-xs text-gray-500">
+              <li key={i} className="flex gap-2 text-xs text-muted-foreground">
                 <span className="shrink-0 font-medium text-gray-700">{i + 1}.</span>
                 <span>{step}</span>
               </li>
@@ -150,10 +150,10 @@ export function APIKeyFormItem({ config, onSaved }: APIKeyFormItemProps) {
 
       {/* 저장된 키 표시 */}
       {hasSaved && (
-        <div className="mb-4 flex items-center gap-2 rounded-lg bg-gray-50 px-3 py-2">
-          <CheckCircle size={14} className="text-gray-500" />
-          <span className="text-xs text-gray-500">등록된 키: {"●".repeat(12)}</span>
-          <span className="ml-auto text-xs text-gray-400">{saved.model}</span>
+        <div className="mb-4 flex items-center gap-2 rounded-lg bg-muted/50 px-3 py-2">
+          <CheckCircle size={14} className="text-muted-foreground" />
+          <span className="text-xs text-muted-foreground">등록된 키: {"●".repeat(12)}</span>
+          <span className="ml-auto text-xs text-muted-foreground/70">{saved.model}</span>
         </div>
       )}
 
@@ -161,7 +161,7 @@ export function APIKeyFormItem({ config, onSaved }: APIKeyFormItemProps) {
       {!hasSaved && (
         <div className="space-y-3">
           <div>
-            <Label className="mb-1.5 text-xs text-gray-600">API 키</Label>
+            <Label className="mb-1.5 text-xs text-muted-foreground">API 키</Label>
             <div className="relative">
               <Input
                 type={showKey ? "text" : "password"}
@@ -171,12 +171,12 @@ export function APIKeyFormItem({ config, onSaved }: APIKeyFormItemProps) {
                   if (testResult) setTestResult(null);
                 }}
                 placeholder={config.keyPlaceholder}
-                className="bg-white pr-10 text-sm"
+                className="bg-background pr-10 text-sm"
               />
               <button
                 type="button"
                 onClick={() => setShowKey((v) => !v)}
-                className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute top-1/2 right-3 -translate-y-1/2 text-muted-foreground/70 hover:text-muted-foreground"
               >
                 {showKey ? <EyeOff size={14} /> : <Eye size={14} />}
               </button>
@@ -185,7 +185,7 @@ export function APIKeyFormItem({ config, onSaved }: APIKeyFormItemProps) {
 
           {/* 모델 선택 */}
           <div>
-            <Label className="mb-1.5 text-xs text-gray-600">모델</Label>
+            <Label className="mb-1.5 text-xs text-muted-foreground">모델</Label>
             <select
               value={model}
               onChange={(e) => {
@@ -193,7 +193,7 @@ export function APIKeyFormItem({ config, onSaved }: APIKeyFormItemProps) {
                 if (testResult) setTestResult(null);
               }}
               className={cn(
-                "border-input w-full rounded-md border bg-white px-3 py-2 text-sm",
+                "border-input w-full rounded-md border bg-background px-3 py-2 text-sm",
                 "focus:ring-ring focus:ring-2 focus:outline-none"
               )}
             >
@@ -210,13 +210,13 @@ export function APIKeyFormItem({ config, onSaved }: APIKeyFormItemProps) {
             <div
               className={cn(
                 "flex items-center gap-2 rounded-lg px-3 py-2 text-xs",
-                testResult === "success" ? "bg-gray-50 text-gray-700" : "bg-gray-100 text-gray-700"
+                testResult === "success" ? "bg-muted/50 text-gray-700" : "bg-muted text-gray-700"
               )}
             >
               {testResult === "success" ? (
-                <CheckCircle size={13} className="text-gray-500" />
+                <CheckCircle size={13} className="text-muted-foreground" />
               ) : (
-                <XCircle size={13} className="text-gray-500" />
+                <XCircle size={13} className="text-muted-foreground" />
               )}
               {testMessage}
             </div>
@@ -229,7 +229,7 @@ export function APIKeyFormItem({ config, onSaved }: APIKeyFormItemProps) {
               size="sm"
               onClick={handleTest}
               disabled={testing || !key}
-              className="flex-1 bg-white text-xs"
+              className="flex-1 bg-background text-xs"
             >
               {testing ? (
                 <>

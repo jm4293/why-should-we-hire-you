@@ -21,9 +21,9 @@ import { useHistoryStore } from "@/store/history";
 import type { HistoryItem } from "@/types";
 
 const PROVIDER_COLORS = {
-  openai: "bg-gray-100 text-gray-600",
-  anthropic: "bg-gray-100 text-gray-600",
-  google: "bg-gray-100 text-gray-600",
+  openai: "bg-muted text-muted-foreground",
+  anthropic: "bg-muted text-muted-foreground",
+  google: "bg-muted text-muted-foreground",
 };
 const PROVIDER_SHORT = { openai: "GPT", anthropic: "Claude", google: "Gemini" };
 
@@ -49,10 +49,10 @@ export function HistorySidebar({ collapsed, onToggle, currentId, onSelect }: His
 
   if (collapsed) {
     return (
-      <aside className="flex h-full w-14 flex-col items-center gap-3 border-r border-gray-200 bg-white py-4">
+      <aside className="flex h-full w-14 flex-col items-center gap-3 border-r border-border bg-background py-4">
         <button
           onClick={onToggle}
-          className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100"
+          className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted"
           title="사이드바 열기"
         >
           <PanelLeftOpen size={16} />
@@ -66,7 +66,7 @@ export function HistorySidebar({ collapsed, onToggle, currentId, onSelect }: His
               title={`${item.companyName} - ${item.jobTitle}`}
               className={cn(
                 "flex h-9 w-9 items-center justify-center rounded-lg transition-colors",
-                currentId === item.id ? "bg-gray-900 text-white" : "text-gray-500 hover:bg-gray-100"
+                currentId === item.id ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"
               )}
             >
               {item.result?.input?.companyInfo?.companyUrl ? (
@@ -90,15 +90,15 @@ export function HistorySidebar({ collapsed, onToggle, currentId, onSelect }: His
   }
 
   return (
-    <aside className="flex h-full w-60 flex-col border-r border-gray-200 bg-white">
+    <aside className="flex h-full w-60 flex-col border-r border-border bg-background">
       {/* 헤더 */}
-      <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3">
+      <div className="flex items-center justify-between border-b border-border/50 px-4 py-3">
         <span className="text-sm font-medium text-gray-700">분석 히스토리</span>
         <div className="flex items-center gap-1">
           {items.length > 0 && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-gray-400">
+                <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-muted-foreground/70">
                   <MoreHorizontal size={14} />
                 </Button>
               </DropdownMenuTrigger>
@@ -123,7 +123,7 @@ export function HistorySidebar({ collapsed, onToggle, currentId, onSelect }: His
           )}
           <button
             onClick={onToggle}
-            className="flex h-7 w-7 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100"
+            className="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground/70 hover:bg-muted"
           >
             <PanelLeftClose size={14} />
           </button>
@@ -133,9 +133,9 @@ export function HistorySidebar({ collapsed, onToggle, currentId, onSelect }: His
       {/* 리스트 */}
       <div className="flex-1 overflow-y-auto py-2">
         {!isLoaded ? (
-          <div className="px-4 py-8 text-center text-xs text-gray-400">불러오는 중...</div>
+          <div className="px-4 py-8 text-center text-xs text-muted-foreground/70">불러오는 중...</div>
         ) : items.length === 0 ? (
-          <div className="px-4 py-8 text-center text-xs text-gray-400">
+          <div className="px-4 py-8 text-center text-xs text-muted-foreground/70">
             저장된 분석 결과가 없습니다.
           </div>
         ) : (
@@ -144,12 +144,12 @@ export function HistorySidebar({ collapsed, onToggle, currentId, onSelect }: His
               key={item.id}
               onClick={() => onSelect(item)}
               className={cn(
-                "group flex cursor-pointer items-start gap-3 px-4 py-3 transition-colors hover:bg-gray-50",
-                currentId === item.id && "bg-gray-100"
+                "group flex cursor-pointer items-start gap-3 px-4 py-3 transition-colors hover:bg-muted/50",
+                currentId === item.id && "bg-muted"
               )}
             >
               {/* 파비콘 */}
-              <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-gray-100">
+              <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-muted">
                 {item.companyUrl ? (
                   <img
                     src={`https://www.google.com/s2/favicons?domain=${new URL(item.companyUrl).hostname}&sz=32`}
@@ -160,14 +160,14 @@ export function HistorySidebar({ collapsed, onToggle, currentId, onSelect }: His
                     }}
                   />
                 ) : (
-                  <FileText size={13} className="text-gray-400" />
+                  <FileText size={13} className="text-muted-foreground/70" />
                 )}
               </div>
 
               {/* 정보 */}
               <div className="min-w-0 flex-1">
-                <p className="truncate text-xs font-medium text-gray-800">{item.companyName}</p>
-                <p className="truncate text-xs text-gray-500">{item.jobTitle}</p>
+                <p className="truncate text-xs font-medium text-primary/90">{item.companyName}</p>
+                <p className="truncate text-xs text-muted-foreground">{item.jobTitle}</p>
                 <div className="mt-1 flex flex-wrap items-center gap-1">
                   {item.providers.map((p) => (
                     <span
@@ -181,7 +181,7 @@ export function HistorySidebar({ collapsed, onToggle, currentId, onSelect }: His
                     </span>
                   ))}
                 </div>
-                <div className="mt-1 flex items-center gap-1 text-[10px] text-gray-400">
+                <div className="mt-1 flex items-center gap-1 text-[10px] text-muted-foreground/70">
                   <Clock size={9} />
                   {formatDate(item.createdAt)}
                 </div>
@@ -193,7 +193,7 @@ export function HistorySidebar({ collapsed, onToggle, currentId, onSelect }: His
                   e.stopPropagation();
                   remove(item.id);
                 }}
-                className="mt-0.5 hidden text-gray-300 group-hover:block hover:text-gray-700"
+                className="mt-0.5 hidden text-muted-foreground/50 group-hover:block hover:text-gray-700"
               >
                 <Trash2 size={13} />
               </button>

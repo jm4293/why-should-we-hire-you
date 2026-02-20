@@ -57,7 +57,7 @@ export function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-white px-6 text-center"
+      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background px-6 text-center"
     >
       {/* 흐르는 라인 배경 */}
       {LINES.map((line, i) => (
@@ -84,23 +84,23 @@ export function HeroSection() {
           backgroundColor: "rgba(255,255,255,0.4)",
         }}
       >
-        <p className="mb-6 text-sm font-medium tracking-[0.25em] text-gray-400 uppercase">
+        <p className="mb-6 text-sm font-medium tracking-[0.25em] text-muted-foreground/70 uppercase">
           AI 서류 분석 서비스
         </p>
 
         <h1
           ref={titleRef}
-          className="mb-8 text-5xl leading-[1.1] font-semibold tracking-tight text-gray-900 md:text-7xl"
+          className="mb-8 text-5xl leading-[1.1] font-semibold tracking-tight text-primary md:text-7xl"
           style={{ opacity: 0 }}
         >
           Why should
           <br />
-          <span className="text-gray-400">we hire you?</span>
+          <span className="text-muted-foreground/70">we hire you?</span>
         </h1>
 
         <p
           ref={subRef}
-          className="mx-auto mb-12 max-w-xl text-lg leading-relaxed text-gray-500 md:text-xl"
+          className="mx-auto mb-12 max-w-xl text-lg leading-relaxed text-muted-foreground md:text-xl"
           style={{ opacity: 0 }}
         >
           AI 면접관이 이력서와 채용 공고를 함께 분석해
@@ -114,13 +114,13 @@ export function HeroSection() {
               window.location.href = "/analyze";
             }}
             className={cn(
-              "rounded-full bg-gray-900 px-10 py-4 text-base font-medium text-white",
+              "rounded-full bg-primary px-10 py-4 text-base font-medium text-primary-foreground",
               "transition-all duration-200 hover:bg-gray-700 active:scale-95"
             )}
           >
             분석 시작하기
           </button>
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-muted-foreground/70">
             API 키가 필요하며, 각 AI 서비스에서 무료로 발급받을 수 있습니다.
           </p>
         </div>

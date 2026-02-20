@@ -21,7 +21,7 @@ export function ResultPanel({ result, onRetry }: ResultPanelProps) {
 
   if (result.status === "pending") {
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-3 text-gray-400">
+      <div className="flex h-full flex-col items-center justify-center gap-3 text-muted-foreground/70">
         <Loader2 size={24} className="animate-spin" />
         <p className="text-sm">분석 대기 중...</p>
       </div>
@@ -31,10 +31,10 @@ export function ResultPanel({ result, onRetry }: ResultPanelProps) {
   if (result.status === "error") {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-4 p-6 text-center">
-        <XCircle size={32} className="text-gray-400" />
+        <XCircle size={32} className="text-muted-foreground/70" />
         <div>
-          <p className="text-sm font-medium text-gray-800">분석에 실패했습니다</p>
-          <p className="mt-1 text-xs text-gray-500">{result.error}</p>
+          <p className="text-sm font-medium text-primary/90">분석에 실패했습니다</p>
+          <p className="mt-1 text-xs text-muted-foreground">{result.error}</p>
         </div>
         <Button
           variant="outline"
@@ -54,14 +54,14 @@ export function ResultPanel({ result, onRetry }: ResultPanelProps) {
   return (
     <div ref={contentRef} className="h-full overflow-y-auto px-6 py-5">
       {isStreaming && !streamedText && (
-        <div className="flex items-center gap-2 text-sm text-gray-400">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground/70">
           <Loader2 size={14} className="animate-spin" />
           <span>분석 중...</span>
         </div>
       )}
 
       {streamedText && (
-        <div className="prose prose-sm max-w-none text-gray-800">
+        <div className="prose prose-sm max-w-none text-primary/90">
           <StreamingMarkdown text={streamedText} isStreaming={isStreaming} />
         </div>
       )}
@@ -74,7 +74,7 @@ function renderInline(text: string): React.ReactNode[] {
   return parts.map((part, i) => {
     if (part.startsWith("**") && part.endsWith("**")) {
       return (
-        <strong key={i} className="font-semibold text-gray-800">
+        <strong key={i} className="font-semibold text-primary/90">
           {part.slice(2, -2)}
         </strong>
       );
@@ -93,14 +93,14 @@ function StreamingMarkdown({ text, isStreaming }: { text: string; isStreaming: b
 
         if (line.startsWith("## ")) {
           return (
-            <h2 key={i} className="mt-6 mb-2 text-base font-semibold text-gray-900 first:mt-0">
+            <h2 key={i} className="mt-6 mb-2 text-base font-semibold text-primary first:mt-0">
               {line.slice(3)}
             </h2>
           );
         }
         if (line.startsWith("### ")) {
           return (
-            <h3 key={i} className="mt-4 mb-1.5 text-sm font-semibold text-gray-800">
+            <h3 key={i} className="mt-4 mb-1.5 text-sm font-semibold text-primary/90">
               {line.slice(4)}
             </h3>
           );
