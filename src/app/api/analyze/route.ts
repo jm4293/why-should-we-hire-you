@@ -3,7 +3,7 @@ import { createOpenAI } from "@ai-sdk/openai";
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { streamText } from "ai";
-import type { AIProvider, AnalysisInput, Persona, CoverLetterItem } from "@/types";
+import type { AnalysisInput, Persona, CoverLetterItem } from "@/types";
 
 export const runtime = "edge";
 export const maxDuration = 30;
@@ -15,7 +15,7 @@ interface RequestBody {
 }
 
 function buildPrompt(input: AnalysisInput, persona: Persona): string {
-  const { companyInfo, resumeFiles, coverLetterItems } = input;
+  const { companyInfo, resumeFiles = [], coverLetterItems = [] } = input;
 
   const resumeText = resumeFiles
     .map((f) => `[${f.type === "resume" ? "이력서" : "추가 서류"} - ${f.name}]\n${f.text}`)
