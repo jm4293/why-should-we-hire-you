@@ -18,7 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { useHistoryStore } from "@/store/history";
+import { useHistoryStore } from "@/hooks/useHistoryStore";
 import type { HistoryItem } from "@/types";
 
 const PROVIDER_COLORS = {

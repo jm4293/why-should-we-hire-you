@@ -8,8 +8,8 @@ import { AnalyzeWizard } from "@/components/analyze/AnalyzeWizard";
 import { HistorySidebar } from "@/components/history/HistorySidebar";
 import { MobileGuard } from "@/components/common/MobileGuard";
 import { hasAnyAPIKey } from "@/lib/storage/api-keys";
-import { useAnalysisStore } from "@/store/analysis";
-import { useModalStore } from "@/store/modal";
+import { useAnalysisStore } from "@/hooks/useAnalysisStore";
+import { useModalStore } from "@/hooks/useModalStore";
 import { cn } from "@/lib/utils";
 import type { HistoryItem } from "@/types";
 

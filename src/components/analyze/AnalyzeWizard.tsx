@@ -11,7 +11,7 @@ import { Step2Resume } from "./steps/Step2Resume";
 import { Step3CoverLetter } from "./steps/Step3CoverLetter";
 import { Step4Persona } from "./steps/Step4Persona";
 import { Step5Confirm } from "./steps/Step5Confirm";
-import { useAnalysisStore } from "@/store/analysis";
+import { useAnalysisStore } from "@/hooks/useAnalysisStore";
 import { saveDraft, getDraft, deleteDraft } from "@/lib/storage/db";
 import type { AnalysisInput } from "@/types";
 
@@ -151,12 +151,12 @@ export function AnalyzeWizard() {
       </div>
 
       {/* 하단 네비게이션 */}
-      <div className="flex items-center justify-between border-t border-border/50 pt-5">
+      <div className="border-border/50 flex items-center justify-between border-t pt-5">
         <Button
           variant="ghost"
           onClick={goPrev}
           disabled={currentStep === 1}
-          className="gap-1.5 text-sm text-muted-foreground"
+          className="text-muted-foreground gap-1.5 text-sm"
         >
           <ChevronLeft size={15} />
           이전
@@ -168,7 +168,7 @@ export function AnalyzeWizard() {
             <ChevronRight size={15} />
           </Button>
         ) : (
-          <Button onClick={handleStart} className="gap-2 bg-primary text-sm hover:bg-gray-700">
+          <Button onClick={handleStart} className="bg-primary gap-2 text-sm hover:bg-gray-700">
             <Zap size={15} />
             분석 시작
           </Button>

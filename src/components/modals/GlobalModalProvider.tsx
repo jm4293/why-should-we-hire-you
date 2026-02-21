@@ -1,7 +1,9 @@
 "use client";
 
-import { useModalStore } from "@/store/modal";
-import { NoKeyModal } from "./NoKeyModal";
+import dynamic from "next/dynamic";
+import { useModalStore } from "@/hooks/useModalStore";
+
+const NoKeyModal = dynamic(() => import("./NoKeyModal").then((mod) => mod.NoKeyModal));
 
 export function GlobalModalProvider() {
   const { modals } = useModalStore();
