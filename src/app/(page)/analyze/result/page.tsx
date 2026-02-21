@@ -14,7 +14,7 @@ import { useAnalysisStore } from "@/hooks/useAnalysisStore";
 import { useHistoryStore } from "@/hooks/useHistoryStore";
 import { getAllAPIKeys } from "@/lib/storage/api-keys";
 import { cn } from "@/lib/utils";
-import type { AnalysisResult, InterviewerResult, HistoryItem } from "@/types";
+import type { AnalysisResult, InterviewerResult, HistoryItem, AnalysisInput } from "@/types";
 
 function MobileGuard({ children }: { children: React.ReactNode }) {
   return (
@@ -106,7 +106,12 @@ export default function ResultPage() {
     try {
       const res = await fetch("/api/analyze", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-internal-service-key":
+            process.env.NEXT_PUBLIC_INTERNAL_SERVICE_KEY ||
+            "why-should-we-hire-you-internal-key-2026",
+        },
         body: JSON.stringify({ input, persona, apiKey: key.key }),
         signal: ctrl.signal,
       });

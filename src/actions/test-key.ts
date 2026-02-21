@@ -1,21 +1,22 @@
-import { NextRequest, NextResponse } from "next/server";
+"use server";
+
 import { createOpenAI } from "@ai-sdk/openai";
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { generateText } from "ai";
 import type { AIProvider } from "@/types";
 
-export const runtime = "edge";
-
-export async function POST(req: NextRequest) {
-  const { provider, apiKey, model } = (await req.json()) as {
-    provider: AIProvider;
-    apiKey: string;
-    model: string;
-  };
-
+export async function testKeyAction({
+  provider,
+  apiKey,
+  model,
+}: {
+  provider: AIProvider;
+  apiKey: string;
+  model: string;
+}) {
   if (!provider || !apiKey || !model) {
-    return NextResponse.json({ error: "필수 값이 없습니다." }, { status: 400 });
+    return { error: "필수 값이 없습니다." };
   }
 
   try {
@@ -33,10 +34,10 @@ export async function POST(req: NextRequest) {
       const google = createGoogleGenerativeAI({ apiKey });
       await generateText({ model: google(model), prompt: "hi", maxOutputTokens: 20 });
     } else {
-      return NextResponse.json({ error: "지원하지 않는 제공자입니다." }, { status: 400 });
+      return { error: "지원하지 않는 제공자입니다." };
     }
 
-    return NextResponse.json({ ok: true });
+    return { ok: true };
   } catch (err) {
     const raw = err instanceof Error ? err.message : "";
 
@@ -51,6 +52,6 @@ export async function POST(req: NextRequest) {
       message = "네트워크 오류가 발생했습니다. 인터넷 연결을 확인해주세요.";
     }
 
-    return NextResponse.json({ error: message }, { status: 400 });
+    return { error: message };
   }
 }

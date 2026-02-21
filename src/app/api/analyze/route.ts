@@ -1,18 +1,12 @@
 import { NextRequest } from "next/server";
+
 import { createOpenAI } from "@ai-sdk/openai";
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { streamText } from "ai";
 import type { AnalysisInput, Persona, CoverLetterItem } from "@/types";
 
-export const runtime = "edge";
 export const maxDuration = 30;
-
-interface RequestBody {
-  input: AnalysisInput;
-  persona: Persona;
-  apiKey: string;
-}
 
 function buildPrompt(input: AnalysisInput, persona: Persona): string {
   const { companyInfo, resumeFiles = [], coverLetterItems = [] } = input;
@@ -82,7 +76,16 @@ ${coverLetterQuestions}`
 }
 
 export async function POST(req: NextRequest) {
-  const { input, persona, apiKey } = (await req.json()) as RequestBody;
+  // 간단한 내부 서비스 검증 (외부에서 직접 호출하는 것을 방지)
+  const internalKey = req.headers.get("x-internal-service-key");
+  const expectedKey =
+    process.env.INTERNAL_SERVICE_KEY || "why-should-we-hire-you-internal-key-2026";
+
+  if (internalKey !== expectedKey) {
+    return new Response(JSON.stringify({ error: "Unauthorized access." }), { status: 401 });
+  }
+
+  const { input, persona, apiKey } = await req.json();
 
   if (!apiKey || !persona || !input) {
     return new Response(JSON.stringify({ error: "필수 데이터가 없습니다." }), { status: 400 });

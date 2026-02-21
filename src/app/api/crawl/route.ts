@@ -3,6 +3,15 @@ import { NextRequest, NextResponse } from "next/server";
 export const runtime = "edge";
 
 export async function POST(req: NextRequest) {
+  // 간단한 내부 서비스 검증
+  const internalKey = req.headers.get("x-internal-service-key");
+  const expectedKey =
+    process.env.INTERNAL_SERVICE_KEY || "why-should-we-hire-you-internal-key-2026";
+
+  if (internalKey !== expectedKey) {
+    return NextResponse.json({ error: "Unauthorized access." }, { status: 401 });
+  }
+
   const { url } = await req.json();
 
   if (!url || typeof url !== "string") {
