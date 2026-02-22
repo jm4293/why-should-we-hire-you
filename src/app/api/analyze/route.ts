@@ -8,19 +8,12 @@ import type { AnalysisInput, Persona, CoverLetterItem } from "@/types";
 
 export const maxDuration = 30;
 
-function buildPrompt(input: AnalysisInput, persona: Persona): string {
-  const { companyInfo, resumeFiles = [], coverLetterItems = [] } = input;
+function buildAnalysisPrompt(input: AnalysisInput, persona: Persona): string {
+  const { companyInfo, resumeFiles = [] } = input;
 
   const resumeText = resumeFiles
     .map((f) => `[${f.type === "resume" ? "이력서" : "추가 서류"} - ${f.name}]\n${f.text}`)
     .join("\n\n");
-
-  const coverLetterQuestions = coverLetterItems
-    .map(
-      (item: CoverLetterItem, idx: number) =>
-        `자소서 문항 ${idx + 1} (최대 ${item.maxLength}자): ${item.question}`
-    )
-    .join("\n");
 
   return `당신은 ${persona.description}입니다.
 
@@ -58,21 +51,45 @@ ${resumeText}
 아래 형식으로 수정이 필요한 항목을 작성하세요:
 **원문:** (원래 내용)
 **수정 제안:** (개선된 내용)
-**이유:** (수정이 필요한 이유)
+**이유:** (수정이 필요한 이유)`;
+}
+
+function buildCoverLetterPrompt(input: AnalysisInput, persona: Persona): string {
+  const { companyInfo, resumeFiles = [], coverLetterItems = [] } = input;
+
+  const resumeText = resumeFiles
+    .map((f) => `[${f.type === "resume" ? "이력서" : "추가 서류"} - ${f.name}]\n${f.text}`)
+    .join("\n\n");
+
+  const coverLetterQuestions = coverLetterItems
+    .map(
+      (item: CoverLetterItem, idx: number) =>
+        `자소서 문항 ${idx + 1} (최대 ${item.maxLength}자): ${item.question}`
+    )
+    .join("\n");
+
+  return `당신은 ${persona.description}입니다.
+
+아래 회사 정보와 지원자 서류를 바탕으로 자소서 초안을 작성해주세요.
+
+[회사 소개]
+${companyInfo.companyContent || "(정보 없음)"}
+
+[채용 공고]
+${companyInfo.jobContent || "(정보 없음)"}
+
+[지원자 서류]
+${resumeText}
 
 ---
 
-${
-  coverLetterItems.length > 0
-    ? `## 5. 자소서 초안
+## 5. 자소서 초안
 
 다음 각 문항에 대해 답변을 작성해주세요. 각 문항은 소제목을 포함한 여러 단락으로 나눠서 작성하세요.
 소제목은 면접관이 읽었을 때 흥미를 유발할 수 있어야 하며, 강조된 단어나 감탄사는 사용하지 마세요.
 글자 수 제한을 반드시 지켜주세요.
 
-${coverLetterQuestions}`
-    : "## 5. 자소서 초안\n(자소서 문항이 입력되지 않았습니다)"
-}`;
+${coverLetterQuestions}`;
 }
 
 export async function POST(req: NextRequest) {
@@ -85,13 +102,17 @@ export async function POST(req: NextRequest) {
     return new Response(JSON.stringify({ error: "Unauthorized access." }), { status: 401 });
   }
 
-  const { input, persona, apiKey } = await req.json();
+  const { input, persona, apiKey, phase } = await req.json();
 
   if (!apiKey || !persona || !input) {
     return new Response(JSON.stringify({ error: "필수 데이터가 없습니다." }), { status: 400 });
   }
 
-  const prompt = buildPrompt(input, persona);
+  // phase: "analysis" (1~4번) | "cover-letter" (5번) | undefined (기존 동작 - 전체)
+  const isCoverLetter = phase === "cover-letter";
+  const prompt = isCoverLetter
+    ? buildCoverLetterPrompt(input, persona)
+    : buildAnalysisPrompt(input, persona);
 
   try {
     let result;
@@ -101,21 +122,21 @@ export async function POST(req: NextRequest) {
       result = streamText({
         model: openai(persona.model),
         prompt,
-        maxOutputTokens: 4000,
+        maxOutputTokens: 2000,
       });
     } else if (persona.provider === "anthropic") {
       const anthropic = createAnthropic({ apiKey });
       result = streamText({
         model: anthropic(persona.model),
         prompt,
-        maxOutputTokens: 4000,
+        maxOutputTokens: 2000,
       });
     } else if (persona.provider === "google") {
       const google = createGoogleGenerativeAI({ apiKey });
       result = streamText({
         model: google(persona.model),
         prompt,
-        maxOutputTokens: 4000,
+        maxOutputTokens: 2000,
       });
     } else {
       return new Response(JSON.stringify({ error: "지원하지 않는 AI 제공자입니다." }), {

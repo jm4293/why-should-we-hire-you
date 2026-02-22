@@ -35,7 +35,7 @@ function MobileGuard({ children }: { children: React.ReactNode }) {
 
 export default function ResultPage() {
   const router = useRouter();
-  const { input, setInput, results, setResults, updateResult, isAnalyzing, setIsAnalyzing } =
+  const { input, setInput, results, setResults, updateResult, isAnalyzing, setIsAnalyzing, reset } =
     useAnalysisStore();
   const { save: saveHistory } = useHistoryStore();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -87,6 +87,46 @@ export default function ResultPage() {
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const fetchStream = async (
+    personaId: string,
+    phase: "analysis" | "cover-letter",
+    apiKey: string,
+    persona: (typeof personas)[number],
+    signal: AbortSignal,
+    onChunk: (accumulated: string) => void
+  ): Promise<string> => {
+    const res = await fetch("/api/analyze", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-internal-service-key":
+          process.env.NEXT_PUBLIC_INTERNAL_SERVICE_KEY ||
+          "why-should-we-hire-you-internal-key-2026",
+      },
+      body: JSON.stringify({ input, persona, apiKey, phase }),
+      signal,
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      throw new Error(data.error || "분석 요청에 실패했습니다.");
+    }
+
+    const reader = res.body?.getReader();
+    const decoder = new TextDecoder();
+    let accumulated = "";
+
+    while (reader) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      const chunk = decoder.decode(value, { stream: true });
+      accumulated += chunk;
+      onChunk(accumulated);
+    }
+
+    return accumulated;
+  };
+
   const runStream = async (personaId: string) => {
     const persona = personas.find((p) => p.id === personaId);
     if (!persona) return;
@@ -104,36 +144,35 @@ export default function ResultPage() {
     updateResult(personaId, { status: "streaming", streamText: "" });
 
     try {
-      const res = await fetch("/api/analyze", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-internal-service-key":
-            process.env.NEXT_PUBLIC_INTERNAL_SERVICE_KEY ||
-            "why-should-we-hire-you-internal-key-2026",
-        },
-        body: JSON.stringify({ input, persona, apiKey: key.key }),
-        signal: ctrl.signal,
-      });
+      // 1단계: 분석 (1~4번 섹션)
+      const analysisText = await fetchStream(
+        personaId,
+        "analysis",
+        key.key,
+        persona,
+        ctrl.signal,
+        (accumulated) => updateResult(personaId, { streamText: accumulated })
+      );
 
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "분석 요청에 실패했습니다.");
+      // 2단계: 자소서 (5번 섹션) — 문항이 있을 때만
+      const hasCoverLetter = (input.coverLetterItems ?? []).length > 0;
+      if (hasCoverLetter && !ctrl.signal.aborted) {
+        const coverLetterText = await fetchStream(
+          personaId,
+          "cover-letter",
+          key.key,
+          persona,
+          ctrl.signal,
+          (accumulated) =>
+            updateResult(personaId, { streamText: analysisText + "\n\n" + accumulated })
+        );
+        updateResult(personaId, {
+          status: "done",
+          streamText: analysisText + "\n\n" + coverLetterText,
+        });
+      } else {
+        updateResult(personaId, { status: "done", streamText: analysisText });
       }
-
-      const reader = res.body?.getReader();
-      const decoder = new TextDecoder();
-      let accumulated = "";
-
-      while (reader) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        const chunk = decoder.decode(value, { stream: true });
-        accumulated += chunk;
-        updateResult(personaId, { streamText: accumulated });
-      }
-
-      updateResult(personaId, { status: "done", streamText: accumulated });
     } catch (err: unknown) {
       if (err instanceof Error && err.name === "AbortError") return;
       const message = err instanceof Error ? err.message : "알 수 없는 오류";
@@ -217,7 +256,10 @@ export default function ResultPage() {
       <header className="border-border bg-background flex h-14 shrink-0 items-center justify-between border-b px-6">
         <div className="flex items-center gap-3">
           <button
-            onClick={() => router.push("/analyze")}
+            onClick={() => {
+              reset();
+              router.push("/analyze");
+            }}
             className="text-muted-foreground hover:text-primary/90 flex items-center gap-1.5 text-sm"
           >
             <ArrowLeft size={14} />새 분석
