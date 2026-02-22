@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Settings, Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { AnalyzeHeader } from "@/components/analyze/AnalyzeHeader";
 import { AnalyzeWizard } from "@/components/analyze/AnalyzeWizard";
 import { HistorySidebar } from "@/components/history/HistorySidebar";
 import { MobileGuard } from "@/components/common/MobileGuard";
@@ -16,6 +15,7 @@ import type { HistoryItem } from "@/types";
 export default function AnalyzePage() {
   const router = useRouter();
   const { reset, setInput, setResults, setIsAnalyzing } = useAnalysisStore();
+
   const openModal = useModalStore((state) => state.openModal);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [selectedHistory, setSelectedHistory] = useState<HistoryItem | null>(null);
@@ -42,36 +42,7 @@ export default function AnalyzePage() {
 
   return (
     <MobileGuard>
-      {/* 상단 네비 */}
-      <header className="border-border bg-background flex h-14 shrink-0 items-center justify-between border-b px-6">
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => router.push("/")}
-            className="text-primary hover:text-muted-foreground text-sm font-semibold"
-          >
-            Why Should We Hire You?
-          </button>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleNewAnalysis}
-            className="gap-1.5 text-xs"
-          >
-            <Plus size={13} />새 분석
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => router.push("/settings")}
-            className="text-muted-foreground gap-1.5 text-xs"
-          >
-            <Settings size={14} />
-            설정
-          </Button>
-        </div>
-      </header>
+      <AnalyzeHeader onNewAnalysis={handleNewAnalysis} />
 
       {/* 메인 레이아웃 */}
       <div className="flex min-h-0 flex-1">

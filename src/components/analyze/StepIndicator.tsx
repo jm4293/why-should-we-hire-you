@@ -7,7 +7,7 @@ const STEPS = [
   { number: 1, label: "회사 정보" },
   { number: 2, label: "내 서류" },
   { number: 3, label: "자소서 문항" },
-  { number: 4, label: "페르소나 설정" },
+  { number: 4, label: "AI 면접관" },
   { number: 5, label: "최종 확인" },
 ];
 
@@ -30,14 +30,17 @@ export function StepIndicator({ currentStep }: StepIndicatorProps) {
                 className={cn(
                   "flex h-8 w-8 items-center justify-center rounded-full text-xs font-medium transition-all",
                   done && "bg-primary text-primary-foreground",
-                  active && "bg-primary text-primary-foreground ring-4 ring-ring/10",
+                  active && "bg-primary text-primary-foreground ring-ring/10 ring-4",
                   !done && !active && "bg-muted text-muted-foreground/70"
                 )}
               >
                 {done ? <Check size={14} /> : step.number}
               </div>
               <span
-                className={cn("text-xs", active ? "font-medium text-primary" : "text-muted-foreground/70")}
+                className={cn(
+                  "text-xs",
+                  active ? "text-primary font-medium" : "text-muted-foreground/70"
+                )}
               >
                 {step.label}
               </span>

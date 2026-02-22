@@ -113,9 +113,14 @@ export function Step4Persona({ value, onChange }: Step4PersonaProps) {
   };
 
   const toggleEnabled = (id: string) => {
+    const slot = slots.find((s) => s.id === id);
+    const willEnable = slot ? !slot.enabled : false;
     const next = slots.map((s) => (s.id === id ? { ...s, enabled: !s.enabled } : s));
     setSlots(next);
     syncToParent(next);
+    if (willEnable) {
+      setExpandedCards((prev) => ({ ...prev, [id]: true }));
+    }
   };
 
   const handleSavePersona = async (slot: PersonaSlot) => {
