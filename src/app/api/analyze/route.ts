@@ -122,21 +122,21 @@ export async function POST(req: NextRequest) {
       result = streamText({
         model: openai(persona.model),
         prompt,
-        maxOutputTokens: 2000,
+        maxOutputTokens: 4000,
       });
     } else if (persona.provider === "anthropic") {
       const anthropic = createAnthropic({ apiKey });
       result = streamText({
         model: anthropic(persona.model),
         prompt,
-        maxOutputTokens: 2000,
+        maxOutputTokens: 4000,
       });
     } else if (persona.provider === "google") {
       const google = createGoogleGenerativeAI({ apiKey });
       result = streamText({
         model: google(persona.model),
         prompt,
-        maxOutputTokens: 2000,
+        maxOutputTokens: 8000,
       });
     } else {
       return new Response(JSON.stringify({ error: "지원하지 않는 AI 제공자입니다." }), {
