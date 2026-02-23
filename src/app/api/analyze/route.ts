@@ -117,26 +117,28 @@ export async function POST(req: NextRequest) {
   try {
     let result;
 
+    const maxOutputTokens = isCoverLetter ? 8000 : 4000;
+
     if (persona.provider === "openai") {
       const openai = createOpenAI({ apiKey });
       result = streamText({
         model: openai(persona.model),
         prompt,
-        maxOutputTokens: 4000,
+        maxOutputTokens,
       });
     } else if (persona.provider === "anthropic") {
       const anthropic = createAnthropic({ apiKey });
       result = streamText({
         model: anthropic(persona.model),
         prompt,
-        maxOutputTokens: 4000,
+        maxOutputTokens,
       });
     } else if (persona.provider === "google") {
       const google = createGoogleGenerativeAI({ apiKey });
       result = streamText({
         model: google(persona.model),
         prompt,
-        maxOutputTokens: 8000,
+        maxOutputTokens,
       });
     } else {
       return new Response(JSON.stringify({ error: "지원하지 않는 AI 제공자입니다." }), {
