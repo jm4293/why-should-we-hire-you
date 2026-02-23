@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { useShallow } from "zustand/react/shallow";
 
 interface ModalStore {
   modals: {
@@ -15,3 +16,17 @@ export const useModalStore = create<ModalStore>((set) => ({
   openModal: (modalId) => set((state) => ({ modals: { ...state.modals, [modalId]: true } })),
   closeModal: (modalId) => set((state) => ({ modals: { ...state.modals, [modalId]: false } })),
 }));
+
+// Actions
+export const useModalActions = () =>
+  useModalStore(
+    useShallow((state) => ({
+      openModal: state.openModal,
+      closeModal: state.closeModal,
+    }))
+  );
+
+// Selectors
+export const useModals = () => useModalStore((state) => state.modals);
+export const useIsModalOpen = (modalId: keyof ModalStore["modals"]) =>
+  useModalStore((state) => state.modals[modalId]);

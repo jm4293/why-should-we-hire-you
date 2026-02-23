@@ -11,13 +11,19 @@ import { Step2Resume } from "./steps/Step2Resume";
 import { Step3CoverLetter } from "./steps/Step3CoverLetter";
 import { Step4Persona } from "./steps/Step4Persona";
 import { Step5Confirm } from "./steps/Step5Confirm";
-import { useAnalysisStore } from "@/hooks/useAnalysisStore";
+import {
+  useAnalysisCurrentStep,
+  useAnalysisInput,
+  useAnalysisActions,
+} from "@/hooks/useAnalysisStore";
 import { saveDraft, getDraft, deleteDraft } from "@/lib/storage/db";
 import type { AnalysisInput } from "@/types";
 
 export function AnalyzeWizard() {
   const router = useRouter();
-  const { input, currentStep, setStep, updateInput } = useAnalysisStore();
+  const input = useAnalysisInput();
+  const currentStep = useAnalysisCurrentStep();
+  const { setStep, updateInput } = useAnalysisActions();
 
   // 임시저장 복원
   useEffect(() => {

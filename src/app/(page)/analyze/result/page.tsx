@@ -10,7 +10,13 @@ import { ResultPanel } from "@/components/result/ResultPanel";
 import { PDFViewer } from "@/components/result/PDFViewer";
 import { DownloadButton } from "@/components/result/DownloadButton";
 import { HistorySidebar } from "@/components/history/HistorySidebar";
-import { useAnalysisStore } from "@/hooks/useAnalysisStore";
+import {
+  useAnalysisInput,
+  useAnalysisResults,
+  useAnalysisIsAnalyzing,
+  useAnalysisActions,
+  useAnalysisStore,
+} from "@/hooks/useAnalysisStore";
 import { useHistoryStore } from "@/hooks/useHistoryStore";
 import { getAllAPIKeys } from "@/lib/storage/api-keys";
 import { cn } from "@/lib/utils";
@@ -35,8 +41,10 @@ function MobileGuard({ children }: { children: React.ReactNode }) {
 
 export default function ResultPage() {
   const router = useRouter();
-  const { input, setInput, results, setResults, updateResult, isAnalyzing, setIsAnalyzing, reset } =
-    useAnalysisStore();
+  const input = useAnalysisInput();
+  const results = useAnalysisResults();
+  const isAnalyzing = useAnalysisIsAnalyzing();
+  const { setInput, setResults, updateResult, setIsAnalyzing, reset } = useAnalysisActions();
   const { save: saveHistory } = useHistoryStore();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);

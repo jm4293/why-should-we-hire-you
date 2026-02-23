@@ -22,12 +22,7 @@ export function AnalyzeHeader({ onNewAnalysis }: AnalyzeHeaderProps) {
         </button>
       </div>
       <div className="flex items-center gap-2">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={onNewAnalysis}
-          className="gap-1.5 text-xs"
-        >
+        <Button variant="outline" size="sm" onClick={onNewAnalysis} className="gap-1.5 text-xs">
           <Plus size={13} />새 분석
         </Button>
         <Button

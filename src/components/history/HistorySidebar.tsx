@@ -18,7 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { useHistoryStore } from "@/hooks/useHistoryStore";
+import { useHistoryItems, useHistoryIsLoaded, useHistoryActions } from "@/hooks/useHistoryStore";
 import type { HistoryItem } from "@/types";
 
 const PROVIDER_COLORS = {
@@ -36,7 +36,9 @@ interface HistorySidebarProps {
 }
 
 export function HistorySidebar({ collapsed, onToggle, currentId, onSelect }: HistorySidebarProps) {
-  const { items, isLoaded, load, remove, clear } = useHistoryStore();
+  const items = useHistoryItems();
+  const isLoaded = useHistoryIsLoaded();
+  const { load, remove, clear } = useHistoryActions();
   const [confirmClear, setConfirmClear] = useState(false);
 
   useEffect(() => {

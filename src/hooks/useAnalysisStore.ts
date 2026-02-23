@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { useShallow } from "zustand/react/shallow";
 import type { AnalysisInput, InterviewerResult } from "@/types";
 
 interface AnalysisStore {
@@ -49,3 +50,23 @@ export const useAnalysisStore = create<AnalysisStore>((set) => ({
 
   reset: () => set(initialState),
 }));
+
+// Actions
+export const useAnalysisActions = () =>
+  useAnalysisStore(
+    useShallow((state) => ({
+      setInput: state.setInput,
+      updateInput: state.updateInput,
+      setStep: state.setStep,
+      setResults: state.setResults,
+      updateResult: state.updateResult,
+      setIsAnalyzing: state.setIsAnalyzing,
+      reset: state.reset,
+    }))
+  );
+
+// Selectors
+export const useAnalysisInput = () => useAnalysisStore((state) => state.input);
+export const useAnalysisCurrentStep = () => useAnalysisStore((state) => state.currentStep);
+export const useAnalysisResults = () => useAnalysisStore((state) => state.results);
+export const useAnalysisIsAnalyzing = () => useAnalysisStore((state) => state.isAnalyzing);

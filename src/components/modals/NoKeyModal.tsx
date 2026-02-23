@@ -3,11 +3,11 @@
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { useModalStore } from "@/hooks/useModalStore";
+import { useModalActions } from "@/hooks/useModalStore";
 
 export function NoKeyModal({ open }: { open: boolean }) {
   const router = useRouter();
-  const closeModal = useModalStore((state) => state.closeModal);
+  const { closeModal } = useModalActions();
 
   const handleOpenChange = (isOpen: boolean) => {
     if (!isOpen) {

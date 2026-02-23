@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { useShallow } from "zustand/react/shallow";
 import type { HistoryItem } from "@/types";
 import { getAllHistory, saveHistory, deleteHistory, clearAllHistory } from "@/lib/storage/db";
 
@@ -37,3 +38,18 @@ export const useHistoryStore = create<HistoryStore>((set, get) => ({
     set({ items: [] });
   },
 }));
+
+// Actions
+export const useHistoryActions = () =>
+  useHistoryStore(
+    useShallow((state) => ({
+      load: state.load,
+      save: state.save,
+      remove: state.remove,
+      clear: state.clear,
+    }))
+  );
+
+// Selectors
+export const useHistoryItems = () => useHistoryStore((state) => state.items);
+export const useHistoryIsLoaded = () => useHistoryStore((state) => state.isLoaded);

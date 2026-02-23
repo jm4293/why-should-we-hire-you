@@ -7,16 +7,16 @@ import { AnalyzeWizard } from "@/components/analyze/AnalyzeWizard";
 import { HistorySidebar } from "@/components/history/HistorySidebar";
 import { MobileGuard } from "@/components/common/MobileGuard";
 import { hasAnyAPIKey } from "@/lib/storage/api-keys";
-import { useAnalysisStore } from "@/hooks/useAnalysisStore";
-import { useModalStore } from "@/hooks/useModalStore";
+import { useAnalysisActions } from "@/hooks/useAnalysisStore";
+import { useModalActions } from "@/hooks/useModalStore";
 import { cn } from "@/lib/utils";
 import type { HistoryItem } from "@/types";
 
 export default function AnalyzePage() {
   const router = useRouter();
-  const { reset, setInput, setResults, setIsAnalyzing } = useAnalysisStore();
+  const { reset, setInput, setResults, setIsAnalyzing } = useAnalysisActions();
 
-  const openModal = useModalStore((state) => state.openModal);
+  const { openModal } = useModalActions();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [selectedHistory, setSelectedHistory] = useState<HistoryItem | null>(null);
 
